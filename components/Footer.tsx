@@ -1,85 +1,21 @@
 import React from 'react';
 import Link from 'next/link';
-import { Trophy, Shield, Swords, Gamepad2, Globe, Share2, Code } from 'lucide-react';
+import { Compass, ScrollText, Shield, Swords, Trophy } from 'lucide-react';
 
-export const Footer: React.FC = () => {
-  return (
-    <footer className="w-full bg-slate-950 border-t border-white/10 pt-16 pb-12 mt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-900">
-          
-          {/* BRAND COLUMN */}
-          <div className="space-y-4 md:col-span-1">
-            <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-500 flex items-center justify-center shadow-[0_0_15px_rgba(124,58,237,0.4)]">
-                <Trophy className="w-4 h-4 text-white" />
-              </div>
-              <span className="text-xl font-black tracking-widest violet-gradient-text">ASCEND</span>
-            </div>
-            <p className="text-sm text-slate-400 leading-relaxed">
-              PLAY. ACHIEVE. ASCEND. <br />
-              Turn your gaming achievements into competitive records, rankings, and reputation.
-            </p>
-            <div className="flex items-center space-x-3 pt-2">
-              <a href="#" className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-violet-400 transition-colors">
-                <Globe className="w-4 h-4" />
-              </a>
-              <a href="#" className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-violet-400 transition-colors">
-                <Share2 className="w-4 h-4" />
-              </a>
-              <a href="#" className="p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-violet-400 transition-colors">
-                <Code className="w-4 h-4" />
-              </a>
-            </div>
-          </div>
-
-          {/* PLATFORM LINKS */}
-          <div>
-            <h4 className="text-xs font-bold text-slate-300 uppercase tracking-widest mb-4">Platform</h4>
-            <ul className="space-y-2.5 text-sm text-slate-400">
-              <li><Link href="/games" className="hover:text-violet-300 transition-colors">Supported Games</Link></li>
-              <li><Link href="/achievements" className="hover:text-violet-300 transition-colors">Achievement Directory</Link></li>
-              <li><Link href="/challenges" className="hover:text-violet-300 transition-colors">Weekly Challenges</Link></li>
-              <li><Link href="/rankings" className="hover:text-violet-300 transition-colors">Global Leaderboards</Link></li>
-            </ul>
-          </div>
-
-          {/* COMPETITION LINKS */}
-          <div>
-            <h4 className="text-xs font-bold text-slate-300 uppercase tracking-widest mb-4">Competition</h4>
-            <ul className="space-y-2.5 text-sm text-slate-400">
-              <li><Link href="/my-achievements" className="hover:text-violet-300 transition-colors">My Achievements</Link></li>
-              <li><Link href="/rankings" className="hover:text-violet-300 transition-colors">Season Rankings</Link></li>
-              <li><Link href="/challenges" className="hover:text-violet-300 transition-colors">Active Tournaments</Link></li>
-              <li><Link href="/admin" className="hover:text-violet-300 transition-colors">Moderation & Verification</Link></li>
-            </ul>
-          </div>
-
-          {/* RARITY HIERARCHY */}
-          <div>
-            <h4 className="text-xs font-bold text-slate-300 uppercase tracking-widest mb-4">Rarity System</h4>
-            <ul className="space-y-2 text-xs font-mono">
-              <li className="flex items-center space-x-2 text-slate-400"><span className="w-2 h-2 rounded-full bg-slate-500" /><span>COMMON (50%+)</span></li>
-              <li className="flex items-center space-x-2 text-emerald-400"><span className="w-2 h-2 rounded-full bg-emerald-500" /><span>UNCOMMON (25–49.9%)</span></li>
-              <li className="flex items-center space-x-2 text-blue-400"><span className="w-2 h-2 rounded-full bg-blue-500" /><span>RARE (10–24.9%)</span></li>
-              <li className="flex items-center space-x-2 text-purple-400"><span className="w-2 h-2 rounded-full bg-purple-500" /><span>EPIC (3–9.9%)</span></li>
-              <li className="flex items-center space-x-2 text-amber-400"><span className="w-2 h-2 rounded-full bg-amber-500" /><span>LEGENDARY (0.5–2.9%)</span></li>
-              <li className="flex items-center space-x-2 text-rose-400 animate-pulse"><span className="w-2 h-2 rounded-full bg-rose-500" /><span>MYTHIC (&lt;0.5%)</span></li>
-            </ul>
-          </div>
-
+export const Footer: React.FC = () => (
+  <footer className="w-full bg-[#070605] border-t border-[#b89a5a]/10 pt-16 pb-10 mt-20">
+    <div className="max-w-7xl mx-auto px-5 sm:px-8">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-[#b89a5a]/10">
+        <div className="md:col-span-1">
+          <div className="flex items-center gap-3 mb-5"><div className="ascend-seal w-9 h-9 rounded-full"><span className="relative z-10 text-[#b89a5a]">✦</span></div><span className="ascend-display text-xl tracking-[.22em] ascend-gold-text">ASCEND</span></div>
+          <p className="text-sm text-[#756d60] leading-6">An order of deeds, trials and legends. Compete, leave your mark, and climb beyond the known.</p>
+          <div className="mt-7 text-[8px] uppercase tracking-[.34em] text-[#504b43]">Archive seal • Season 01</div>
         </div>
-
-        {/* BOTTOM COPYRIGHT */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 space-y-4 sm:space-y-0">
-          <div>&copy; {new Date().getFullYear()} ASCEND Platform Inc. All rights reserved. Built for competitive gamers.</div>
-          <div className="flex space-x-6">
-            <a href="#" className="hover:text-slate-400">Privacy Policy</a>
-            <a href="#" className="hover:text-slate-400">Terms of Service</a>
-            <a href="#" className="hover:text-slate-400">Security Audit</a>
-          </div>
-        </div>
+        <div><h4 className="text-[9px] uppercase tracking-[.32em] text-[#806c45] mb-5">The World</h4><ul className="space-y-3 text-sm text-[#756d60]"><li><Link href="/games" className="hover:text-[#d7bd7a]">Territories</Link></li><li><Link href="/challenges" className="hover:text-[#d7bd7a]">Trial Grounds</Link></li><li><Link href="/rankings" className="hover:text-[#d7bd7a]">Hall of Ascension</Link></li><li><Link href="/achievements" className="hover:text-[#d7bd7a]">Archive</Link></li></ul></div>
+        <div><h4 className="text-[9px] uppercase tracking-[.32em] text-[#806c45] mb-5">Your Path</h4><ul className="space-y-3 text-sm text-[#756d60]"><li><Link href="/my-achievements" className="hover:text-[#d7bd7a]">Deeds</Link></li><li><Link href="/profile" className="hover:text-[#d7bd7a]">Dossier</Link></li><li><Link href="/settings" className="hover:text-[#d7bd7a]">Settings</Link></li><li><Link href="/admin" className="hover:text-[#d7bd7a]">Inner Council</Link></li></ul></div>
+        <div><h4 className="text-[9px] uppercase tracking-[.32em] text-[#806c45] mb-5">The Hierarchy</h4><div className="space-y-3 text-[10px] uppercase tracking-widest text-[#6c655b]"><div className="flex items-center gap-3"><Shield className="w-3.5 h-3.5 text-[#756d60]" /> Common</div><div className="flex items-center gap-3"><Swords className="w-3.5 h-3.5 text-[#87936f]" /> Rare</div><div className="flex items-center gap-3"><ScrollText className="w-3.5 h-3.5 text-[#9b7b53]" /> Epic</div><div className="flex items-center gap-3"><Trophy className="w-3.5 h-3.5 text-[#b89a5a]" /> Legendary</div><div className="flex items-center gap-3"><Compass className="w-3.5 h-3.5 text-[#8c719c]" /> Mythic</div></div></div>
       </div>
-    </footer>
-  );
-};
+      <div className="pt-7 flex flex-col sm:flex-row items-center justify-between gap-4 text-[9px] uppercase tracking-[.18em] text-[#4f4a43]"><span>© {new Date().getFullYear()} ASCEND • The Order records all deeds.</span><div className="flex gap-5"><a href="#" className="hover:text-[#8a806f]">Privacy</a><a href="#" className="hover:text-[#8a806f]">Terms</a><a href="#" className="hover:text-[#8a806f]">Security</a></div></div>
+    </div>
+  </footer>
+);
