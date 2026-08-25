@@ -36,7 +36,17 @@ export default function SignupPage() {
       }
 
       if (!data.session) {
-        setErrorMsg('Account created. Please verify your email, then sign in to continue onboarding.');
+        const { error: otpError } = await supabase.auth.signInWithOtp({
+          email,
+          options: { shouldCreateUser: false },
+        });
+
+        if (otpError) {
+          setErrorMsg(otpError.message);
+          return;
+        }
+
+        router.push(`/verify-email?email=${encodeURIComponent(email)}`);
         return;
       }
 
