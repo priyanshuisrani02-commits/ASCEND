@@ -23,10 +23,19 @@ export const AscendNavbar: React.FC = () => {
     const loadIdentity = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user || !mounted) return;
+
       const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).maybeSingle();
       if (profile && mounted) {
         setCurrentUser(profile as Profile);
-        setNotifications(await getNotifications('current'));
+        try {
+          const userNotifications = await getNotifications(user.id);
+          if (mounted) setNotifications(userNotifications);
+        } catch (error) {
+          // Notifications should never crash the navbar if the auth session is
+          // still settling after signup/email-code verification.
+          console.warn('Unable to load notifications:', error);
+          if (mounted) setNotifications([]);
+        }
       }
     };
 
