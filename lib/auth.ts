@@ -1,7 +1,8 @@
+import { User } from '@supabase/supabase-js';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 
 type AdminAuthResult =
-  | { authorized: true; user: NonNullable<Awaited<ReturnType<typeof createServerSupabaseClient>>['auth']['getUser']>['data']['user'] }
+  | { authorized: true; user: User }
   | { authorized: false; redirectUrl: string };
 
 /**
