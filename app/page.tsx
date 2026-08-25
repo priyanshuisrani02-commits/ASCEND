@@ -18,7 +18,24 @@ const destinations = [
 
 export default function HomePage() {
   const [activities, setActivities] = useState<ActivityEvent[]>([]);
-  useEffect(() => { getActivities().then(setActivities); }, []);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadActivities = async () => {
+      try {
+        const data = await getActivities();
+        if (mounted) setActivities(data);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unable to load recent deeds.';
+        console.warn('Unable to load recent deeds:', message);
+        if (mounted) setActivities([]);
+      }
+    };
+
+    void loadActivities();
+    return () => { mounted = false; };
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#080706] text-[#e8ddc5] flex flex-col">
