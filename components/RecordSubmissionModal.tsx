@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from './ui/Button';
 import { X, Upload, CheckCircle2 } from 'lucide-react';
 import { Game } from '@/lib/types';
@@ -15,7 +15,7 @@ interface RecordSubmissionModalProps {
 }
 
 export const RecordSubmissionModal: React.FC<RecordSubmissionModalProps> = ({ isOpen, onClose, games, onSuccess }) => {
-  const [selectedGameId, setSelectedGameId] = useState(games[0]?.id || '');
+  const [selectedGameId, setSelectedGameId] = useState('');
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('Speedrun');
   const [scoreValue, setScoreValue] = useState('');
@@ -25,18 +25,16 @@ export const RecordSubmissionModal: React.FC<RecordSubmissionModalProps> = ({ is
   const [successMsg, setSuccessMsg] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  useEffect(() => {
-    if (!selectedGameId && games[0]?.id) setSelectedGameId(games[0].id);
-  }, [games, selectedGameId]);
-
   if (!isOpen) return null;
+
+  const effectiveGameId = selectedGameId || games[0]?.id || '';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const cleanTitle = title.trim();
     const cleanUnit = scoreUnit.trim();
     const score = Number(scoreValue);
-    const game = games.find(g => g.id === selectedGameId) || games[0];
+    const game = games.find(g => g.id === effectiveGameId) || games[0];
 
     if (!cleanTitle || !cleanUnit || !game || !Number.isFinite(score)) {
       setErrorMsg('Complete every field with a valid value before submitting.');
@@ -101,7 +99,7 @@ export const RecordSubmissionModal: React.FC<RecordSubmissionModalProps> = ({ is
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Game</label>
-              <select value={selectedGameId} onChange={e => setSelectedGameId(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 text-sm focus:border-violet-500 outline-none">
+              <select value={effectiveGameId} onChange={e => setSelectedGameId(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 text-sm focus:border-violet-500 outline-none">
                 {games.map(g => <option key={g.id} value={g.id}>{g.title} ({g.genre})</option>)}
               </select>
             </div>
