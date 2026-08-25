@@ -8,7 +8,6 @@ import { AchievementCard } from '@/components/AchievementCard';
 import { getProfileByUsername, getMyAchievements, getRecords, getActivities } from '@/lib/data/store';
 import { Profile, Achievement, RecordSubmission, ActivityEvent } from '@/lib/types';
 import { UserRound } from 'lucide-react';
-import Link from 'next/link';
 
 const messageOf = (error: unknown) => {
   if (error instanceof Error) return error.message;
@@ -54,13 +53,14 @@ export default function UserProfilePage({ params }: { params: Promise<{ username
 
   const unlockedCount = achievements.filter(a => a.is_unlocked).length;
   const rareCount = achievements.filter(a => a.is_unlocked && (a.rarity === 'RARE' || a.rarity === 'EPIC')).length;
+  const avatarSrc = typeof profile.avatar_url === 'string' && profile.avatar_url.trim() ? profile.avatar_url.trim() : null;
 
   return <div className="min-h-screen bg-[#090a0f] text-slate-100 flex flex-col justify-between">
     <NavbarWrapper />
     <main className="flex-1 w-full pb-20">
       <div className="relative pt-12 pb-16 bg-gradient-to-b from-violet-950/30 via-slate-950 to-[#090a0f] border-b border-slate-800"><div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"><div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-8 text-center md:text-left">
         <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
-          {profile.avatar_url ? <img src={profile.avatar_url} alt={profile.username} className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl object-cover border-4 border-violet-500/50 shadow-[0_0_30px_rgba(124,58,237,0.3)]" /> : <div aria-hidden="true" className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl grid place-items-center bg-slate-900 border-4 border-violet-500/50 text-violet-400"><UserRound className="w-12 h-12" /></div>}
+          {avatarSrc ? <img src={avatarSrc} alt={profile.username} className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl object-cover border-4 border-violet-500/50 shadow-[0_0_30px_rgba(124,58,237,0.3)]" /> : <div aria-hidden="true" className="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl grid place-items-center bg-slate-900 border-4 border-violet-500/50 text-violet-400"><UserRound className="w-12 h-12" /></div>}
           <div><div className="flex flex-wrap items-center justify-center sm:justify-start gap-2"><h1 className="text-3xl sm:text-4xl font-black text-white">{profile.username}</h1>{profile.is_admin && <span className="px-2.5 py-0.5 rounded-md bg-violet-600/30 border border-violet-500/50 text-violet-300 text-xs font-bold uppercase tracking-wider">MODERATOR</span>}</div><p className="text-sm text-slate-400 mt-1 max-w-lg leading-relaxed">{profile.bio}</p><div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-3">{profile.favorite_games.map(g => <span key={g} className="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-[11px] font-bold text-slate-300">{g}</span>)}</div></div>
         </div>
         <div className="glass-panel p-6 rounded-2xl border border-violet-500/30 w-full md:w-80 space-y-4"><div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider"><span className="text-slate-400">GLOBAL RANKING</span><span className="text-amber-400 font-mono text-base">#1,842</span></div><div className="flex items-center justify-between text-xs font-bold uppercase tracking-wider"><span className="text-slate-400">RANKING POINTS</span><span className="text-violet-400 font-mono text-base">{profile.ranking_points} RP</span></div><XPProgress xp={profile.xp} level={profile.level} /></div>
