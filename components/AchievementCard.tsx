@@ -9,30 +9,29 @@ interface AchievementCardProps {
   onUnlock?: (id: string) => void;
 }
 
+function AchievementIcon({ iconName, unlocked }: { iconName: string; unlocked: boolean }) {
+  const className = unlocked ? 'w-6 h-6 animate-pulse' : 'w-5 h-5 text-slate-600';
+  if (!unlocked) return <Lock className={className} />;
+
+  switch (iconName) {
+    case 'Crosshair': return <Crosshair className={className} />;
+    case 'Zap': return <Zap className={className} />;
+    case 'Flame': return <Flame className={className} />;
+    case 'Target': return <Target className={className} />;
+    case 'ShieldAlert': return <ShieldAlert className={className} />;
+    case 'Crown': return <Crown className={className} />;
+    default: return <Trophy className={className} />;
+  }
+}
+
 export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, onUnlock }) => {
   const isUnlocked = achievement.is_unlocked;
-  
-  const getIcon = (iconName: string) => {
-    switch (iconName) {
-      case 'Crosshair': return Crosshair;
-      case 'Zap': return Zap;
-      case 'Flame': return Flame;
-      case 'Target': return Target;
-      case 'ShieldAlert': return ShieldAlert;
-      case 'Crown': return Crown;
-      default: return Trophy;
-    }
-  };
-
-  const IconComponent = getIcon(achievement.icon_url);
-  const unlockPercentage = achievement.total_players_count > 0 
+  const unlockPercentage = achievement.total_players_count > 0
     ? ((achievement.unlocked_count / achievement.total_players_count) * 100).toFixed(1)
     : '5.2';
 
   return (
     <div className="group relative transition-all duration-300">
-      
-      {/* SHIELD CREST BADGE HEADER (VERTICAL STACK TOP) */}
       <div className="flex items-center space-x-3 mb-[-12px] relative z-20 px-3">
         <div
           className={clsx(
@@ -42,9 +41,8 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, o
               : 'bg-slate-900 border-slate-700 text-slate-500'
           )}
         >
-          {isUnlocked ? <IconComponent className="w-6 h-6 animate-pulse" /> : <Lock className="w-5 h-5 text-slate-600" />}
+          <AchievementIcon iconName={achievement.icon_url} unlocked={isUnlocked} />
         </div>
-        
         <div className="flex items-center space-x-2">
           <RarityBadge rarity={achievement.rarity} size="sm" />
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-mono">
@@ -53,7 +51,6 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, o
         </div>
       </div>
 
-      {/* PARCHMENT / SCROLL UNROLL CARD BODY */}
       <div
         className={clsx(
           'glass-panel p-5 pt-7 rounded-3xl border transition-all duration-400 relative overflow-hidden',
@@ -63,26 +60,20 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, o
             : 'border-slate-800 bg-slate-950/90 opacity-90'
         )}
       >
-        {/* PARCHMENT BACKGROUND SCROLL LIGHT EFFECT */}
         <div className="absolute top-0 right-0 w-36 h-36 bg-violet-600/10 rounded-full blur-3xl group-hover:bg-violet-600/25 transition-all pointer-events-none" />
-
         <div className="space-y-2">
           <h3 className={clsx('text-lg font-black tracking-wide', isUnlocked ? 'text-white group-hover:text-violet-300' : 'text-slate-300')}>
             {achievement.title}
           </h3>
-
-          {/* UNROLLING DESCRIPTION TEXT ON HOVER */}
           <div className="text-xs text-slate-400 leading-relaxed group-hover:text-slate-200 transition-colors">
             {achievement.description}
           </div>
-
           <div className="pt-2 text-[11px] text-violet-400 font-mono flex items-center space-x-1.5 opacity-80 group-hover:opacity-100 transition-opacity">
             <Scroll className="w-3.5 h-3.5" />
             <span>Criterion: {achievement.requirements}</span>
           </div>
         </div>
 
-        {/* FOOTER REWARD & UNLOCK STATE */}
         <div className="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between text-xs">
           <div className="flex items-center space-x-3">
             <span className="font-bold text-amber-400 font-mono flex items-center space-x-1">
@@ -109,7 +100,6 @@ export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, o
             )
           )}
         </div>
-
       </div>
     </div>
   );
