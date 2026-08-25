@@ -1,12 +1,16 @@
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 
+type AdminAuthResult =
+  | { authorized: true; user: NonNullable<Awaited<ReturnType<typeof createServerSupabaseClient>>['auth']['getUser']>['data']['user'] }
+  | { authorized: false; redirectUrl: string };
+
 /**
  * Server-side admin gate.
  *
  * This is intentionally fail-closed. An email address or client-side flag
  * is never treated as proof of administrative access.
  */
-export async function checkAdminAuth() {
+export async function checkAdminAuth(): Promise<AdminAuthResult> {
   try {
     const supabase = await createServerSupabaseClient();
     const {
