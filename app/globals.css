@@ -38,7 +38,7 @@
 .gold-gradient-text { background:linear-gradient(135deg,#f4e5b2,#b89a5a,#80683a); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
 
 /* Legacy screen bridge: old layouts retain their structure while inheriting ASCEND's world palette. */
-[class~="bg-slate-950"], [class~="bg-[#090a0f"]"] { background-color:#080706 !important; }
+[class~="bg-slate-950"], [class~="bg-[#090a0f]"] { background-color:#080706 !important; }
 [class~="bg-slate-900"] { background-color:#11100e !important; }
 [class~="border-slate-800"], [class~="border-slate-900"] { border-color:rgba(184,154,90,.12) !important; }
 [class~="text-slate-100"], [class~="text-slate-200"] { color:#e8ddc5 !important; }
