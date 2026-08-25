@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import { Bell, Compass, Menu, ScrollText, ShieldCheck, Swords, Trophy, UserRound, X } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Profile, NotificationItem } from '@/lib/types';
-import { getNotifications } from '@/lib/data/store';
 import { createClient } from '@/lib/supabase/client';
 
 export const AscendNavbar: React.FC = () => {
@@ -21,27 +20,68 @@ export const AscendNavbar: React.FC = () => {
     const supabase = createClient();
 
     const loadIdentity = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user || !mounted) return;
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user || !mounted) {
+          if (mounted) {
+            setCurrentUser(null);
+            setNotifications([]);
+          }
+          return;
+        }
 
-      const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).maybeSingle();
-      if (profile && mounted) {
-        setCurrentUser(profile as Profile);
-        try {
-          const userNotifications = await getNotifications(user.id);
-          if (mounted) setNotifications(userNotifications);
-        } catch (error) {
-          // Notifications should never crash the navbar if the auth session is
-          // still settling after signup/email-code verification.
-          console.warn('Unable to load notifications:', error);
-          if (mounted) setNotifications([]);
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .maybeSingle();
+
+        if (!mounted) return;
+
+        if (profile) {
+          setCurrentUser(profile as Profile);
+        }
+
+        // Use the authenticated Supabase user ID directly here. Do not route
+        // navbar notifications through getCurrentUserId(), because auth state
+        // can briefly settle between signup, email-code verification, and the
+        // client-side session refresh.
+        const { data: notificationRows, error: notificationError } = await supabase
+          .from('notifications')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(50);
+
+        if (!mounted) return;
+
+        if (notificationError) {
+          console.warn('Unable to load notifications:', notificationError);
+          setNotifications([]);
+        } else {
+          setNotifications((notificationRows ?? []) as NotificationItem[]);
+        }
+      } catch (error) {
+        // The navbar is non-critical UI. Authentication/session timing issues
+        // must never become an application runtime error.
+        console.warn('Unable to load navbar identity:', error);
+        if (mounted) {
+          setCurrentUser(null);
+          setNotifications([]);
         }
       }
     };
 
     loadIdentity();
-    const { data: listener } = supabase.auth.onAuthStateChange(() => loadIdentity());
-    return () => { mounted = false; listener.subscription.unsubscribe(); };
+
+    const { data: listener } = supabase.auth.onAuthStateChange(() => {
+      loadIdentity();
+    });
+
+    return () => {
+      mounted = false;
+      listener.subscription.unsubscribe();
+    };
   }, []);
 
   const unreadCount = notifications.filter(n => !n.is_read).length;
