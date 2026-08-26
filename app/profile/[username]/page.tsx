@@ -5,8 +5,8 @@ import NavbarWrapper from '@/components/NavbarWrapper';
 import { Footer } from '@/components/Footer';
 import { XPProgress } from '@/components/ui/XPProgress';
 import { AchievementCard } from '@/components/AchievementCard';
-import { getProfileByUsername, getMyAchievements, getRecords, getActivities } from '@/lib/data/store';
-import { Profile, Achievement, RecordSubmission, ActivityEvent } from '@/lib/types';
+import { getProfileByUsername, getMyAchievements, getRecords } from '@/lib/data/store';
+import { Profile, Achievement, RecordSubmission } from '@/lib/types';
 import { UserRound } from 'lucide-react';
 
 const messageOf = (error: unknown) => {
@@ -22,7 +22,6 @@ export default function UserProfilePage({ params }: { params: Promise<{ username
   const [profile, setProfile] = useState<Profile | null>(null);
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [records, setRecords] = useState<RecordSubmission[]>([]);
-  const [activities, setActivities] = useState<ActivityEvent[]>([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -33,12 +32,11 @@ export default function UserProfilePage({ params }: { params: Promise<{ username
         if (!mounted) return;
         if (!p) { setError('This competitor profile could not be found.'); return; }
         setProfile(p);
-        const results = await Promise.allSettled([getMyAchievements(p.id), getRecords('VERIFIED'), getActivities()]);
+        const results = await Promise.allSettled([getMyAchievements(p.id), getRecords('VERIFIED')]);
         if (!mounted) return;
-        const [a, r, act] = results;
+        const [a, r] = results;
         setAchievements(a.status === 'fulfilled' ? a.value : []);
         setRecords(r.status === 'fulfilled' ? r.value.filter(x => x.username?.toLowerCase() === p.username.toLowerCase()) : []);
-        setActivities(act.status === 'fulfilled' ? act.value.filter(x => x.username.toLowerCase() === p.username.toLowerCase()) : []);
         results.filter(x => x.status === 'rejected').forEach(x => console.warn('Profile data unavailable:', messageOf(x.reason)));
       } catch (e) {
         console.warn('Unable to load profile:', messageOf(e));
