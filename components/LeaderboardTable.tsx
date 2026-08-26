@@ -1,14 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
 import { Profile } from '@/lib/types';
-import { Trophy, Crown, ShieldCheck, ChevronRight, UserRound } from 'lucide-react';
+import { Crown, ShieldCheck, ChevronRight, UserRound } from 'lucide-react';
 import { clsx } from 'clsx';
 
 interface LeaderboardTableProps { rankings: Profile[]; }
 
 export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ rankings }) => {
   const top3 = rankings.slice(0, 3);
-  const remaining = rankings.slice(3);
   const podiumColors = [
     { border: 'border-amber-500/80', bg: 'bg-gradient-to-b from-amber-500/20 via-slate-900/90 to-slate-950', text: 'text-amber-300', glow: 'shadow-[0_0_30px_rgba(245,158,11,0.3)]', badge: 'bg-amber-500 text-slate-950', title: '1ST PLACE' },
     { border: 'border-slate-400/70', bg: 'bg-gradient-to-b from-slate-400/15 via-slate-900/90 to-slate-950', text: 'text-slate-200', glow: 'shadow-[0_0_20px_rgba(148,163,184,0.2)]', badge: 'bg-slate-300 text-slate-950', title: '2ND PLACE' },
@@ -16,7 +15,7 @@ export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ rankings }) 
   ];
 
   return <div className="space-y-10">
-    {top3.length > 0 && <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end pt-6">{[top3[1], top3[0], top3[2]].filter(Boolean).map((player, idx) => {
+    {top3.length > 0 && <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end pt-6">{[top3[1], top3[0], top3[2]].filter(Boolean).map(player => {
       const originalRank = player.username === top3[0]?.username ? 1 : player.username === top3[1]?.username ? 2 : 3;
       const style = podiumColors[originalRank - 1];
       const isFirst = originalRank === 1;
