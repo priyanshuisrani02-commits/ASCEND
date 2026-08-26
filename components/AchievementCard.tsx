@@ -25,7 +25,7 @@ function AchievementIcon({ iconName, unlocked }: { iconName: string; unlocked: b
 }
 
 export const AchievementCard: React.FC<AchievementCardProps> = ({ achievement, onUnlock }) => {
-  const isUnlocked = achievement.is_unlocked;
+  const isUnlocked = achievement.is_unlocked ?? false;
   const unlockPercentage = achievement.total_players_count > 0
     ? ((achievement.unlocked_count / achievement.total_players_count) * 100).toFixed(1)
     : '5.2';
