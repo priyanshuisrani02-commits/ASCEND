@@ -8,7 +8,6 @@ import { getActivities } from '@/lib/data/store';
 import { Button } from '@/components/ui/Button';
 import { Footer } from '@/components/Footer';
 import NavbarWrapper from '@/components/NavbarWrapper';
-import { CinematicIntro } from '@/components/CinematicIntro';
 
 const destinations = [
   { title: 'The Territories', eyebrow: 'THE KNOWN WORLD', desc: 'Enter the games recorded by the Order. Every territory holds its own trials, deeds and legends.', href: '/games', icon: Compass },
@@ -40,7 +39,6 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#080706] text-[#e8ddc5] flex flex-col">
-      <CinematicIntro eyebrow="THE ORDER OF DEEDS" title="ASCEND" subtitle="The doors open. The fog lifts. Your record begins." />
       <NavbarWrapper />
       <main className="flex-1">
         <section className="ascend-world min-h-[calc(100vh-76px)] flex items-center">
