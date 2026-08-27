@@ -3,39 +3,27 @@
 import { useEffect, useState } from 'react';
 
 interface CinematicIntroProps {
-  storageKey?: string;
   eyebrow: string;
   title: string;
   subtitle: string;
 }
 
-export function CinematicIntro({
-  storageKey = 'ascend-cinematic-intro',
-  eyebrow,
-  title,
-  subtitle,
-}: CinematicIntroProps) {
+export function CinematicIntro({ eyebrow, title, subtitle }: CinematicIntroProps) {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    try {
-      if (window.sessionStorage.getItem(storageKey) === 'seen') {
-        setVisible(false);
-        return;
-      }
-      window.sessionStorage.setItem(storageKey, 'seen');
-    } catch {
-      // If storage is unavailable, the intro still plays and can be dismissed.
-    }
-
     const timer = window.setTimeout(() => setVisible(false), 5200);
     return () => window.clearTimeout(timer);
-  }, [storageKey]);
+  }, []);
 
   if (!visible) return null;
 
   return (
-    <div className="ascend-cinematic fixed inset-0 z-[100]" role="dialog" aria-label={`${title} opening sequence`}>
+    <div
+      className="ascend-cinematic fixed inset-0 z-[100]"
+      role="dialog"
+      aria-label={`${title} opening sequence`}
+    >
       <div className="ascend-cinematic__backdrop" />
       <div className="ascend-cinematic__fog ascend-cinematic__fog--one" />
       <div className="ascend-cinematic__fog ascend-cinematic__fog--two" />
