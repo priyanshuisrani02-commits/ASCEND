@@ -1,0 +1,114 @@
+/* ASCEND VARIED EFFECTS — no chamber should feel like the same entrance twice. */
+
+/* The old doorway is intentionally retired. The transition is now an event: horizon, steel, ascent, pages, wilds, ink, stars, or council. */
+.ascend-cinematic__doors { display:none !important; }
+.ascend-cinematic__architecture { opacity:.28; }
+
+.ascend-cinematic__scene { position:absolute; inset:0; z-index:1; overflow:hidden; pointer-events:none; opacity:.9; }
+.ascend-cinematic__scene-sky { position:absolute; inset:0; background:radial-gradient(circle at 50% 36%,var(--cin-ambient),transparent 30%),linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.72)); }
+.ascend-cinematic__scene-horizon { position:absolute; left:-10%; right:-10%; bottom:12%; height:45%; background:linear-gradient(135deg,transparent 0 17%,rgba(0,0,0,.7) 18% 29%,transparent 30% 37%,rgba(0,0,0,.78) 38% 54%,transparent 55% 62%,rgba(0,0,0,.72) 63% 79%,transparent 80%),linear-gradient(180deg,transparent 0 60%,rgba(0,0,0,.8)); filter:blur(1px); opacity:.8; }
+.ascend-cinematic__scene-mist { position:absolute; left:-20%; width:140%; bottom:3%; height:35%; background:radial-gradient(ellipse,rgba(230,225,211,.16),transparent 67%); filter:blur(24px); }
+.ascend-cinematic__scene-ground { position:absolute; left:-20%; width:140%; bottom:-35%; height:55%; background:radial-gradient(ellipse at 50% 0%,var(--cin-accent-soft),transparent 60%),linear-gradient(180deg,transparent,rgba(0,0,0,.95)); transform:perspective(700px) rotateX(60deg); transform-origin:top center; }
+
+.ascend-cinematic__effect { position:absolute; inset:0; z-index:5; pointer-events:none; overflow:hidden; }
+.effect-shape { position:absolute; display:block; transform-origin:center; }
+
+/* GAMES: a cold mountain horizon sweeps into view. */
+.ascend-cinematic--effect-horizon .ascend-cinematic__scene-horizon { clip-path:polygon(0 45%,8% 30%,15% 48%,25% 16%,34% 42%,43% 25%,51% 49%,62% 12%,72% 39%,81% 20%,90% 43%,100% 28%,100% 100%,0 100%); animation:sceneHorizon var(--cin-duration) cubic-bezier(.2,.8,.2,1) both; }
+.ascend-cinematic--effect-horizon .ascend-cinematic__scene-sky::after { content:""; position:absolute; width:12vw; aspect-ratio:1; border-radius:50%; left:17%; top:19%; background:rgba(180,220,228,.42); box-shadow:0 0 90px rgba(100,180,200,.28); animation:moonRise var(--cin-duration) ease both; }
+.ascend-cinematic--effect-horizon .effect-shape--one { left:-10%; top:42%; width:120%; height:2px; background:linear-gradient(90deg,transparent,var(--cin-accent),transparent); transform:rotate(-7deg); animation:scoutBeam var(--cin-duration) ease both; }
+
+/* CHALLENGES: a stylized steel strike and sparks, not an opening gate. */
+.ascend-cinematic--effect-trial .effect-shape--one { left:14%; top:56%; width:78%; height:3px; background:linear-gradient(90deg,transparent,var(--cin-accent),#fff0dd,var(--cin-accent),transparent); transform:rotate(-18deg) scaleX(.1); filter:blur(.4px); animation:swordSlash var(--cin-duration) cubic-bezier(.2,.8,.2,1) both; }
+.ascend-cinematic--effect-trial .effect-shape--two,.ascend-cinematic--effect-trial .effect-shape--three,.ascend-cinematic--effect-trial .effect-shape--four,.ascend-cinematic--effect-trial .effect-shape--five { width:5px; height:5px; border-radius:50%; background:var(--cin-accent); box-shadow:0 0 16px var(--cin-accent); left:50%; top:53%; animation:sparkBurst var(--cin-duration) ease both; }
+.ascend-cinematic--effect-trial .effect-shape--three { animation-delay:70ms; }
+.ascend-cinematic--effect-trial .effect-shape--four { animation-delay:120ms; }
+.ascend-cinematic--effect-trial .effect-shape--five { animation-delay:170ms; }
+
+/* RANKINGS: a ceremonial ascent of light through monumental pillars. */
+.ascend-cinematic--effect-ascension .ascend-cinematic__scene-horizon { bottom:0; height:78%; opacity:.7; background:linear-gradient(90deg,rgba(0,0,0,.9) 0 12%,transparent 13% 21%,rgba(0,0,0,.78) 22% 28%,transparent 29% 71%,rgba(0,0,0,.78) 72% 78%,transparent 79% 87%,rgba(0,0,0,.9) 88%),linear-gradient(180deg,transparent 0 42%,rgba(201,178,125,.12) 43%,transparent 45%); animation:hallRise var(--cin-duration) ease both; }
+.ascend-cinematic--effect-ascension .effect-shape--one { left:50%; bottom:-15%; width:28vw; height:115vh; border-left:1px solid var(--cin-accent-soft); border-right:1px solid var(--cin-accent-soft); transform:translateX(-50%) scaleY(.1); animation:goldenLift var(--cin-duration) cubic-bezier(.16,1,.3,1) both; box-shadow:0 0 100px var(--cin-ambient); }
+
+/* ACHIEVEMENTS: floating archive pages orbit a central memory seal. */
+.ascend-cinematic--effect-archive .effect-shape { width:130px; height:175px; border:1px solid var(--cin-accent-soft); background:linear-gradient(145deg,rgba(169,154,208,.1),rgba(0,0,0,.55)); box-shadow:0 0 35px rgba(120,90,160,.08); opacity:0; }
+.ascend-cinematic--effect-archive .effect-shape::after { content:"✦  ◇  ✧"; position:absolute; inset:0; display:grid; place-items:center; color:var(--cin-accent); font:20px Georgia,serif; }
+.ascend-cinematic--effect-archive .effect-shape--one { left:13%; top:28%; animation:pageFloatOne var(--cin-duration) ease both; }
+.ascend-cinematic--effect-archive .effect-shape--two { right:13%; top:20%; animation:pageFloatTwo var(--cin-duration) ease both; }
+.ascend-cinematic--effect-archive .effect-shape--three { left:22%; bottom:16%; animation:pageFloatThree var(--cin-duration) ease both; }
+.ascend-cinematic--effect-archive .effect-shape--four { right:23%; bottom:19%; animation:pageFloatFour var(--cin-duration) ease both; }
+.ascend-cinematic--effect-archive .effect-shape--five { left:50%; top:50%; width:220px; height:220px; border-radius:50%; border:1px solid var(--cin-accent-soft); transform:translate(-50%,-50%); animation:memorySeal var(--cin-duration) ease both; }
+
+/* RELICS: forest motes and a slow living canopy. */
+.ascend-cinematic--effect-wilds .ascend-cinematic__scene-horizon { bottom:0; height:70%; background:linear-gradient(115deg,transparent 0 8%,rgba(0,0,0,.85) 9% 13%,transparent 14% 22%,rgba(0,0,0,.8) 23% 28%,transparent 29% 40%,rgba(0,0,0,.82) 41% 47%,transparent 48% 62%,rgba(0,0,0,.82) 63% 70%,transparent 71%),radial-gradient(ellipse at 50% 20%,rgba(134,169,132,.16),transparent 55%); animation:forestReveal var(--cin-duration) ease both; }
+.ascend-cinematic--effect-wilds .effect-shape { width:6px; height:6px; border-radius:50%; background:var(--cin-accent); box-shadow:0 0 20px var(--cin-accent); opacity:0; animation:fireflyRise var(--cin-duration) ease both; }
+.ascend-cinematic--effect-wilds .effect-shape--one { left:18%; top:68%; }
+.ascend-cinematic--effect-wilds .effect-shape--two { left:36%; top:78%; animation-delay:100ms; }
+.ascend-cinematic--effect-wilds .effect-shape--three { left:61%; top:72%; animation-delay:180ms; }
+.ascend-cinematic--effect-wilds .effect-shape--four { left:79%; top:61%; animation-delay:240ms; }
+.ascend-cinematic--effect-wilds .effect-shape--five { left:52%; top:83%; animation-delay:320ms; }
+
+/* PROFILE: an ink stroke writes the dossier into existence. */
+.ascend-cinematic--effect-dossier .effect-shape--one { left:12%; top:38%; width:76%; height:42%; border-top:2px solid var(--cin-accent-soft); border-bottom:1px solid var(--cin-accent-soft); transform:skewY(-7deg) scaleX(.05); animation:inkWrite var(--cin-duration) cubic-bezier(.2,.8,.2,1) both; filter:blur(.2px); }
+.ascend-cinematic--effect-dossier .effect-shape--two { left:20%; top:51%; width:60%; height:1px; background:var(--cin-accent); transform:scaleX(0); animation:inkLine var(--cin-duration) ease both; }
+.ascend-cinematic--effect-dossier .effect-shape--three { left:33%; top:57%; width:34%; height:1px; background:var(--cin-accent-soft); transform:scaleX(0); animation:inkLine var(--cin-duration) ease .15s both; }
+
+/* SETTINGS: celestial observatory rings rotate into alignment. */
+.ascend-cinematic--effect-observatory .effect-shape--one { left:50%; top:50%; width:min(48vw,560px); aspect-ratio:1; border:1px solid var(--cin-accent-soft); border-radius:50%; transform:translate(-50%,-50%) rotateX(68deg) scale(.1); animation:orbitAlign var(--cin-duration) cubic-bezier(.16,1,.3,1) both; }
+.ascend-cinematic--effect-observatory .effect-shape--two { left:50%; top:50%; width:min(32vw,380px); aspect-ratio:1; border:1px dashed var(--cin-accent-soft); border-radius:50%; transform:translate(-50%,-50%) rotateY(70deg) scale(.1); animation:orbitAlignTwo var(--cin-duration) ease both; }
+.ascend-cinematic--effect-observatory .effect-shape--three { left:50%; top:50%; width:4px; height:75vh; background:linear-gradient(transparent,var(--cin-accent),transparent); transform-origin:center; animation:starNeedle var(--cin-duration) ease both; }
+
+/* ADMIN: the council descends from shadow with banners and a central command seal. */
+.ascend-cinematic--effect-council .ascend-cinematic__scene-horizon { bottom:0; height:85%; background:linear-gradient(90deg,rgba(4,0,2,.96) 0 13%,transparent 14% 22%,rgba(8,1,4,.9) 23% 29%,transparent 30% 70%,rgba(8,1,4,.9) 71% 77%,transparent 78% 86%,rgba(4,0,2,.96) 87%),linear-gradient(180deg,transparent,rgba(80,15,29,.16)); animation:councilDescend var(--cin-duration) ease both; }
+.ascend-cinematic--effect-council .effect-shape--one,.ascend-cinematic--effect-council .effect-shape--two { top:-12%; width:20%; height:120%; background:linear-gradient(90deg,rgba(70,9,20,.05),rgba(104,26,42,.7),rgba(20,1,6,.9)); filter:blur(2px); animation:bannerDrop var(--cin-duration) cubic-bezier(.16,1,.3,1) both; }
+.ascend-cinematic--effect-council .effect-shape--one { left:0; transform-origin:top left; }
+.ascend-cinematic--effect-council .effect-shape--two { right:0; transform-origin:top right; animation-delay:80ms; }
+.ascend-cinematic--effect-council .effect-shape--three { left:50%; top:50%; width:180px; aspect-ratio:1; border:2px solid var(--cin-accent-soft); border-radius:50%; transform:translate(-50%,-50%) scale(.05); animation:councilSeal var(--cin-duration) cubic-bezier(.16,1,.3,1) both; }
+
+/* AUTH / HOME: veil, breath and light rather than a door. */
+.ascend-cinematic--effect-awakening .ascend-cinematic__scene-sky::before,.ascend-cinematic--effect-threshold .ascend-cinematic__scene-sky::before { content:""; position:absolute; left:50%; top:52%; width:min(42vw,520px); aspect-ratio:1; border-radius:50%; background:radial-gradient(circle,rgba(255,244,210,.2),transparent 65%); transform:translate(-50%,-50%) scale(.2); animation:awakeningLight var(--cin-duration) cubic-bezier(.16,1,.3,1) both; }
+.ascend-cinematic--effect-threshold .ascend-cinematic__scene-mist { animation:thresholdMist var(--cin-duration) ease both; }
+
+@keyframes sceneHorizon{0%{transform:translateY(35%) scale(1.15);opacity:0}30%{opacity:.9}100%{transform:translateY(0) scale(1);opacity:.85}}
+@keyframes moonRise{0%{transform:translateY(35px);opacity:0}35%{opacity:1}100%{transform:translateY(0);opacity:.8}}
+@keyframes scoutBeam{0%{transform:translate(-35%,-20%) rotate(-7deg);opacity:0}30%{opacity:.9}100%{transform:translate(25%,20%) rotate(-7deg);opacity:0}}
+@keyframes swordSlash{0%{transform:rotate(-18deg) scaleX(.02);opacity:0}18%{opacity:1}42%{transform:rotate(-18deg) scaleX(1);opacity:1}100%{transform:rotate(-18deg) scaleX(1.12);opacity:0}}
+@keyframes sparkBurst{0%{transform:translate(0,0) scale(.2);opacity:0}25%{opacity:1}100%{transform:translate(var(--spark-x,80px),var(--spark-y,-90px)) scale(.02);opacity:0}}
+.effect-shape--two{--spark-x:-110px;--spark-y:-70px}.effect-shape--three{--spark-x:130px;--spark-y:-40px}.effect-shape--four{--spark-x:-75px;--spark-y:80px}.effect-shape--five{--spark-x:95px;--spark-y:70px}
+@keyframes hallRise{0%{transform:translateY(15%) scaleY(.8);opacity:0}100%{transform:translateY(0) scaleY(1);opacity:.8}}
+@keyframes goldenLift{0%{transform:translateX(-50%) scaleY(.05);opacity:0}35%{opacity:.8}100%{transform:translateX(-50%) scaleY(1);opacity:0}}
+@keyframes pageFloatOne{0%{transform:translate(-80px,90px) rotate(-18deg) scale(.5);opacity:0}30%{opacity:.8}100%{transform:translate(30px,-40px) rotate(9deg) scale(1);opacity:0}}
+@keyframes pageFloatTwo{0%{transform:translate(100px,100px) rotate(22deg) scale(.45);opacity:0}30%{opacity:.8}100%{transform:translate(-25px,-55px) rotate(-10deg) scale(1);opacity:0}}
+@keyframes pageFloatThree{0%{transform:translate(-50px,50px) rotate(8deg) scale(.4);opacity:0}32%{opacity:.7}100%{transform:translate(35px,-80px) rotate(-15deg) scale(.9);opacity:0}}
+@keyframes pageFloatFour{0%{transform:translate(70px,45px) rotate(-12deg) scale(.4);opacity:0}32%{opacity:.7}100%{transform:translate(-35px,-70px) rotate(14deg) scale(.9);opacity:0}}
+@keyframes memorySeal{0%{transform:translate(-50%,-50%) scale(.05) rotate(-45deg);opacity:0}30%{opacity:.7}100%{transform:translate(-50%,-50%) scale(1.25) rotate(135deg);opacity:0}}
+@keyframes forestReveal{0%{transform:scale(1.2) translateY(15%);opacity:0}100%{transform:scale(1) translateY(0);opacity:.85}}
+@keyframes fireflyRise{0%{transform:translateY(30px) scale(.2);opacity:0}25%{opacity:1}100%{transform:translate(20px,-130px) scale(1);opacity:0}}
+@keyframes inkWrite{0%{transform:skewY(-7deg) scaleX(.02);opacity:0}45%{opacity:.8}100%{transform:skewY(-7deg) scaleX(1);opacity:0}}
+@keyframes inkLine{0%{transform:scaleX(0);opacity:0}30%{opacity:.8}100%{transform:scaleX(1);opacity:0}}
+@keyframes orbitAlign{0%{transform:translate(-50%,-50%) rotateX(68deg) rotateZ(-90deg) scale(.1);opacity:0}35%{opacity:.8}100%{transform:translate(-50%,-50%) rotateX(68deg) rotateZ(35deg) scale(1.1);opacity:0}}
+@keyframes orbitAlignTwo{0%{transform:translate(-50%,-50%) rotateY(70deg) rotateZ(120deg) scale(.1);opacity:0}35%{opacity:.7}100%{transform:translate(-50%,-50%) rotateY(70deg) rotateZ(-30deg) scale(1.1);opacity:0}}
+@keyframes starNeedle{0%{transform:rotate(-70deg) scaleY(.1);opacity:0}35%{opacity:.7}100%{transform:rotate(80deg) scaleY(1);opacity:0}}
+@keyframes councilDescend{0%{transform:translateY(-12%) scale(1.08);opacity:0}35%{opacity:.85}100%{transform:translateY(0) scale(1);opacity:.8}}
+@keyframes bannerDrop{0%{transform:translateY(-18%) scaleY(.15);opacity:0}30%{opacity:.7}100%{transform:translateY(0) scaleY(1);opacity:0}}
+@keyframes councilSeal{0%{transform:translate(-50%,-50%) scale(.05) rotate(-90deg);opacity:0}35%{opacity:.8}100%{transform:translate(-50%,-50%) scale(1.15) rotate(45deg);opacity:0}}
+@keyframes awakeningLight{0%{transform:translate(-50%,-50%) scale(.15);opacity:0}35%{opacity:1}100%{transform:translate(-50%,-50%) scale(1.3);opacity:0}}
+@keyframes thresholdMist{0%{transform:translateY(50px) scale(1.25);opacity:0}30%{opacity:1}100%{transform:translateY(-80px) scale(.9);opacity:0}}
+
+@media (prefers-reduced-motion:reduce){
+  .ascend-cinematic__effect *,.ascend-cinematic__scene *{animation:none !important;}
+}
+
+/* Persistent atmospheric world scenes behind the actual page. */
+html[data-ascend-scene] body::before { opacity:1; z-index:-10; background-size:auto; mask-image:none; animation:none; }
+html[data-ascend-scene] body::after { z-index:-9; width:100vw; height:100vh; inset:0; transform:none; filter:none; background:radial-gradient(ellipse at center,transparent 25%,rgba(0,0,0,.58) 100%); }
+
+html[data-ascend-scene="home"] body::before { background:radial-gradient(circle at 72% 18%,rgba(220,198,132,.18) 0 4%,transparent 15%),linear-gradient(145deg,transparent 0 58%,rgba(0,0,0,.7) 59% 68%,transparent 69%),linear-gradient(35deg,transparent 0 62%,rgba(0,0,0,.75) 63% 73%,transparent 74%),linear-gradient(180deg,#090807,#030303); }
+html[data-ascend-scene="games"] body::before { background:radial-gradient(circle at 18% 22%,rgba(132,194,210,.2) 0 3%,transparent 14%),linear-gradient(160deg,transparent 0 52%,rgba(2,8,11,.9) 53% 67%,transparent 68%),linear-gradient(25deg,transparent 0 58%,rgba(4,13,17,.92) 59% 74%,transparent 75%),linear-gradient(180deg,#061219,#030709); }
+html[data-ascend-scene="challenges"] body::before { background:radial-gradient(circle at 50% 70%,rgba(197,65,40,.16),transparent 22%),linear-gradient(115deg,transparent 0 42%,rgba(23,5,4,.95) 43% 57%,transparent 58%),linear-gradient(65deg,transparent 0 48%,rgba(35,8,6,.9) 49% 62%,transparent 63%),linear-gradient(180deg,#120605,#030202); }
+html[data-ascend-scene="rankings"] body::before { background:radial-gradient(ellipse at 50% 8%,rgba(220,194,125,.18),transparent 28%),linear-gradient(90deg,rgba(0,0,0,.9) 0 8%,transparent 9% 20%,rgba(0,0,0,.72) 21% 28%,transparent 29% 71%,rgba(0,0,0,.72) 72% 79%,transparent 80% 92%,rgba(0,0,0,.9) 93%),linear-gradient(180deg,#0f0d08,#030302); }
+html[data-ascend-scene="achievements"] body::before { background:radial-gradient(circle at 50% 35%,rgba(159,139,201,.14),transparent 22%),repeating-linear-gradient(90deg,transparent 0 11vw,rgba(164,145,194,.045) 11.2vw 11.5vw,transparent 11.7vw 23vw),linear-gradient(180deg,#0c0811,#030204); }
+html[data-ascend-scene="relics"] body::before { background:radial-gradient(circle at 28% 34%,rgba(104,153,103,.17),transparent 18%),radial-gradient(circle at 76% 42%,rgba(75,127,80,.12),transparent 20%),linear-gradient(120deg,rgba(0,0,0,.86) 0 12%,transparent 13% 24%,rgba(0,0,0,.7) 25% 33%,transparent 34% 67%,rgba(0,0,0,.75) 68% 78%,transparent 79%),linear-gradient(180deg,#061009,#020403); }
+html[data-ascend-scene="profile"] body::before { background:radial-gradient(ellipse at 50% 12%,rgba(203,184,147,.12),transparent 26%),repeating-linear-gradient(90deg,transparent 0 14vw,rgba(192,173,139,.035) 14.2vw 14.5vw,transparent 14.7vw 29vw),linear-gradient(180deg,#100d08,#040302); }
+html[data-ascend-scene="settings"] body::before { background:radial-gradient(circle at 70% 20%,rgba(151,192,217,.18) 0 2%,transparent 15%),radial-gradient(circle at 20% 28%,rgba(151,192,217,.1) 0 1%,transparent 11%),conic-gradient(from 210deg at 50% 50%,transparent,rgba(101,146,173,.05),transparent 18%,rgba(101,146,173,.04),transparent 38%),linear-gradient(180deg,#050d14,#020405); }
+html[data-ascend-scene="admin"] body::before { background:radial-gradient(ellipse at 50% 10%,rgba(160,53,70,.2),transparent 30%),linear-gradient(90deg,rgba(44,4,12,.92) 0 12%,transparent 13% 25%,rgba(47,7,16,.65) 26% 31%,transparent 32% 68%,rgba(47,7,16,.65) 69% 74%,transparent 75% 88%,rgba(44,4,12,.92) 89%),linear-gradient(180deg,#110407,#030102); }
+html[data-ascend-scene="auth"] body::before { background:radial-gradient(circle at 50% 42%,rgba(213,188,127,.14),transparent 22%),linear-gradient(180deg,#0d0b07,#020202); }
