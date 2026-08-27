@@ -1,75 +1,16 @@
-/* ASCEND WORLD LAYER — each route is a different playable chamber. */
-html[data-ascend-scene] body { transition: background .8s ease, color .5s ease; }
-html[data-ascend-scene="games"] body { background:radial-gradient(circle at 50% 5%,rgba(67,145,166,.18),transparent 30rem),linear-gradient(180deg,#061015 0%,#080b0d 55%,#040607 100%); }
-html[data-ascend-scene="challenges"] body { background:radial-gradient(circle at 50% 8%,rgba(139,47,31,.2),transparent 28rem),linear-gradient(180deg,#100605 0%,#0b0707 52%,#040303 100%); }
-html[data-ascend-scene="rankings"] body { background:radial-gradient(circle at 50% 0%,rgba(196,161,70,.18),transparent 34rem),linear-gradient(180deg,#0d0b07,#090806 55%,#040403); }
-html[data-ascend-scene="achievements"] body { background:radial-gradient(circle at 50% 0%,rgba(112,82,151,.2),transparent 32rem),linear-gradient(180deg,#0b0710,#09070c 55%,#040307); }
-html[data-ascend-scene="relics"] body { background:radial-gradient(circle at 50% 0%,rgba(51,105,67,.2),transparent 32rem),linear-gradient(180deg,#061009,#070b08 55%,#030604); }
-html[data-ascend-scene="profile"] body { background:radial-gradient(circle at 50% 0%,rgba(151,122,75,.15),transparent 30rem),linear-gradient(180deg,#0e0b07,#0a0907 55%,#040403); }
-html[data-ascend-scene="settings"] body { background:radial-gradient(circle at 50% 0%,rgba(62,116,151,.2),transparent 32rem),linear-gradient(180deg,#060d14,#080b0e 55%,#030506); }
-html[data-ascend-scene="admin"] body { background:radial-gradient(circle at 50% 0%,rgba(126,42,55,.22),transparent 34rem),radial-gradient(circle at 100% 65%,rgba(86,45,70,.12),transparent 28rem),linear-gradient(180deg,#100507,#090506 60%,#030203); }
-
-/* Route shells override the legacy slate shell so the world is visible behind the UI. */
-html[data-ascend-scene="games"] [class~="bg-[#090a0f]"],html[data-ascend-scene="challenges"] [class~="bg-[#090a0f]"],html[data-ascend-scene="rankings"] [class~="bg-[#090a0f]"],html[data-ascend-scene="achievements"] [class~="bg-[#090a0f]"],html[data-ascend-scene="relics"] [class~="bg-[#090a0f]"],html[data-ascend-scene="profile"] [class~="bg-[#090a0f]"],html[data-ascend-scene="settings"] [class~="bg-[#090a0f]"] { background-color:transparent !important; background-image:none !important; }
-html[data-ascend-scene="games"] [class~="text-slate-100"],html[data-ascend-scene="challenges"] [class~="text-slate-100"],html[data-ascend-scene="rankings"] [class~="text-slate-100"],html[data-ascend-scene="achievements"] [class~="text-slate-100"],html[data-ascend-scene="relics"] [class~="text-slate-100"],html[data-ascend-scene="profile"] [class~="text-slate-100"],html[data-ascend-scene="settings"] [class~="text-slate-100"] { color:#e8ddc5 !important; }
-
-/* Shared world texture: moving dust, floor glow and architectural frame. */
-html[data-ascend-scene] body::before { content:""; position:fixed; inset:0; z-index:-10; pointer-events:none; opacity:.22; background-image:radial-gradient(circle,rgba(255,255,255,.28) 0 1px,transparent 1.5px); background-size:170px 150px; animation:worldDust 28s linear infinite; mask-image:linear-gradient(to bottom,black,transparent 90%); }
-html[data-ascend-scene] body::after { content:""; position:fixed; left:50%; bottom:-20rem; width:80vw; height:42rem; transform:translateX(-50%); z-index:-9; pointer-events:none; background:radial-gradient(ellipse,rgba(255,255,255,.07),transparent 68%); filter:blur(20px); }
-
-/* Games — expedition map / cold frontier. */
-html[data-ascend-scene="games"] main { position:relative; }
-html[data-ascend-scene="games"] main::before { content:""; position:absolute; inset:0 -20vw; z-index:-1; pointer-events:none; opacity:.2; background:linear-gradient(rgba(111,174,190,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(111,174,190,.08) 1px,transparent 1px); background-size:64px 64px; transform:perspective(700px) rotateX(55deg) translateY(18%); transform-origin:center bottom; }
-html[data-ascend-scene="games"] h1 { text-shadow:0 0 45px rgba(91,173,196,.18); }
-html[data-ascend-scene="games"] .glass-panel { background:linear-gradient(145deg,rgba(8,25,31,.82),rgba(5,10,13,.92)); border-color:rgba(111,174,190,.2); box-shadow:inset 0 1px rgba(255,255,255,.025),0 20px 70px rgba(0,0,0,.3),0 0 40px rgba(56,139,161,.04); }
-html[data-ascend-scene="games"] input,html[data-ascend-scene="games"] select,html[data-ascend-scene="games"] button { border-color:rgba(111,174,190,.2); }
-html[data-ascend-scene="games"] .glass-panel-hover:hover { border-color:rgba(111,174,190,.48); box-shadow:0 20px 80px rgba(0,0,0,.42),0 0 45px rgba(56,139,161,.1); }
-
-/* Challenges — furnace arena / battle banners. */
-html[data-ascend-scene="challenges"] main::before { content:""; position:absolute; inset:0 -10vw; z-index:-1; pointer-events:none; background:radial-gradient(circle at 20% 25%,rgba(197,75,48,.09),transparent 18rem),radial-gradient(circle at 80% 30%,rgba(197,75,48,.08),transparent 20rem); }
-html[data-ascend-scene="challenges"] .glass-panel { background:linear-gradient(145deg,rgba(30,9,7,.88),rgba(10,6,6,.94)); border-color:rgba(201,109,79,.24); box-shadow:inset 0 1px rgba(255,220,190,.025),0 22px 70px rgba(0,0,0,.42),0 0 40px rgba(128,42,30,.06); }
-html[data-ascend-scene="challenges"] h1 { text-shadow:0 0 50px rgba(201,109,79,.14); }
-html[data-ascend-scene="challenges"] button { border-color:rgba(201,109,79,.22); }
-html[data-ascend-scene="challenges"] .glass-panel-hover:hover { border-color:rgba(201,109,79,.5); transform:translateY(-6px) scale(1.005); }
-
-/* Rankings — ceremonial hall / gold marble. */
-html[data-ascend-scene="rankings"] main::before { content:""; position:absolute; left:50%; top:0; width:min(70vw,900px); height:55rem; transform:translateX(-50%); z-index:-1; pointer-events:none; background:linear-gradient(90deg,transparent 0 12%,rgba(199,178,125,.045) 12.2% 12.7%,transparent 13% 87%,rgba(199,178,125,.045) 87.3% 87.8%,transparent 88%),radial-gradient(ellipse at 50% 5%,rgba(201,178,125,.1),transparent 48%); }
-html[data-ascend-scene="rankings"] .glass-panel { background:linear-gradient(145deg,rgba(31,26,17,.86),rgba(10,9,7,.94)); border-color:rgba(201,178,125,.2); box-shadow:inset 0 1px rgba(255,255,255,.025),0 24px 80px rgba(0,0,0,.38),0 0 50px rgba(160,126,48,.045); }
-html[data-ascend-scene="rankings"] h1 { letter-spacing:.08em; text-shadow:0 0 55px rgba(215,189,122,.16); }
-html[data-ascend-scene="rankings"] table tr { transition:background .3s ease,transform .3s ease; }
-html[data-ascend-scene="rankings"] table tbody tr:hover { background:rgba(201,178,125,.045); transform:translateX(4px); }
-
-/* Achievements — arcane archive / violet relic light. */
-html[data-ascend-scene="achievements"] main::before { content:"✦   ◇   ✧   ◈   ✦"; position:absolute; inset:8rem 0 auto; height:24rem; z-index:-1; pointer-events:none; text-align:center; font:8rem Georgia,serif; letter-spacing:4rem; color:rgba(169,154,208,.025); transform:rotate(-8deg); }
-html[data-ascend-scene="achievements"] .glass-panel { background:linear-gradient(145deg,rgba(23,16,34,.86),rgba(8,7,12,.94)); border-color:rgba(169,154,208,.2); box-shadow:inset 0 1px rgba(255,255,255,.025),0 24px 75px rgba(0,0,0,.4),0 0 55px rgba(91,73,111,.08); }
-html[data-ascend-scene="achievements"] .glass-panel-hover:hover { border-color:rgba(169,154,208,.5); box-shadow:0 25px 85px rgba(0,0,0,.5),0 0 50px rgba(120,91,170,.12); }
-html[data-ascend-scene="achievements"] h1 { text-shadow:0 0 50px rgba(169,154,208,.16); }
-
-/* Personal relic vault — living green / moss-lit stone. */
-html[data-ascend-scene="relics"] .glass-panel { background:linear-gradient(145deg,rgba(12,29,17,.86),rgba(6,10,7,.94)); border-color:rgba(134,169,132,.2); box-shadow:inset 0 1px rgba(255,255,255,.02),0 24px 80px rgba(0,0,0,.42),0 0 50px rgba(55,101,64,.08); }
-html[data-ascend-scene="relics"] .glass-panel-hover:hover { border-color:rgba(134,169,132,.48); box-shadow:0 24px 80px rgba(0,0,0,.5),0 0 45px rgba(70,130,80,.12); }
-html[data-ascend-scene="relics"] h1 { text-shadow:0 0 48px rgba(134,169,132,.13); }
-
-/* Profile — dossier / parchment chamber. */
-html[data-ascend-scene="profile"] .glass-panel { background:linear-gradient(145deg,rgba(31,25,17,.86),rgba(10,9,7,.94)); border-color:rgba(181,167,141,.2); box-shadow:inset 0 1px rgba(255,255,255,.025),0 24px 75px rgba(0,0,0,.4); }
-html[data-ascend-scene="profile"] h1 { text-shadow:0 0 45px rgba(181,167,141,.12); }
-
-/* Settings — observatory / cold instruments. */
-html[data-ascend-scene="settings"] .glass-panel { background:linear-gradient(145deg,rgba(9,22,30,.88),rgba(6,9,12,.95)); border-color:rgba(155,182,201,.2); box-shadow:inset 0 1px rgba(255,255,255,.025),0 24px 75px rgba(0,0,0,.42),0 0 50px rgba(63,104,135,.08); }
-html[data-ascend-scene="settings"] input,html[data-ascend-scene="settings"] select,html[data-ascend-scene="settings"] textarea { border-color:rgba(155,182,201,.2); background:rgba(4,9,13,.7); }
-html[data-ascend-scene="settings"] h1 { text-shadow:0 0 50px rgba(155,182,201,.14); }
-
-/* Inner Council — scarlet command room. */
-html[data-ascend-scene="admin"] .ascend-admin-world,html[data-ascend-scene="admin"] body { background-color:transparent; }
-html[data-ascend-scene="admin"] .ascend-admin-ambient { background:radial-gradient(ellipse at 50% 0%,rgba(168,72,86,.16),transparent 35%),radial-gradient(circle at 15% 75%,rgba(83,37,52,.1),transparent 30%),linear-gradient(180deg,#110507,#080405); }
-html[data-ascend-scene="admin"] .ascend-admin-grid { opacity:.25; background-size:44px 44px; background-image:linear-gradient(rgba(168,109,119,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(168,109,119,.06) 1px,transparent 1px); }
-html[data-ascend-scene="admin"] .ascend-panel { background:linear-gradient(145deg,rgba(31,11,15,.86),rgba(9,5,7,.95)); border-color:rgba(168,109,119,.2); box-shadow:inset 0 1px rgba(255,220,220,.02),0 24px 80px rgba(0,0,0,.48),0 0 55px rgba(114,39,51,.08); }
-html[data-ascend-scene="admin"] .ascend-panel-hover:hover { border-color:rgba(198,125,137,.5); box-shadow:0 25px 90px rgba(0,0,0,.55),0 0 55px rgba(128,42,55,.13); }
-html[data-ascend-scene="admin"] h1 { text-shadow:0 0 60px rgba(168,109,119,.15); }
-
-@keyframes worldDust { from { transform:translate3d(0,0,0); } to { transform:translate3d(35px,-55px,0); } }
-
-@media (prefers-reduced-motion:reduce) {
-  html[data-ascend-scene] body::before { animation:none; }
-  html[data-ascend-scene] * { scroll-behavior:auto !important; }
-}
+/* ASCEND PERSISTENT WORLDS — atmospheric scenes remain after transitions finish. */
+html[data-ascend-scene] body{position:relative;transition:background-color .8s ease,color .5s ease}html[data-ascend-scene] body:before{content:"";position:fixed;inset:0;z-index:-20;pointer-events:none;opacity:.9;background:radial-gradient(circle at 50% 20%,rgba(255,255,255,.035),transparent 30%),linear-gradient(180deg,transparent 0 55%,rgba(0,0,0,.4));}html[data-ascend-scene] body:after{content:"";position:fixed;inset:0;z-index:-19;pointer-events:none;opacity:.22;background-image:radial-gradient(circle,rgba(255,255,255,.28) 0 1px,transparent 1.5px);background-size:170px 150px;animation:world-dust 30s linear infinite;mask-image:linear-gradient(to bottom,black,transparent 88%)}
+html[data-ascend-scene="home"] body{background:radial-gradient(ellipse at 50% 0%,rgba(183,145,61,.16),transparent 34rem),linear-gradient(180deg,#0d0b07,#080706 58%,#030303)}
+html[data-ascend-scene="games"] body{background:radial-gradient(ellipse at 50% 15%,rgba(67,145,166,.2),transparent 32rem),linear-gradient(180deg,#061015,#080b0d 55%,#040607)}html[data-ascend-scene="games"] body:before{background:linear-gradient(90deg,transparent 0 12%,rgba(100,166,181,.06) 12.1%,transparent 12.3% 87.7%,rgba(100,166,181,.06) 87.8%,transparent 88%),linear-gradient(180deg,rgba(52,126,148,.1),transparent 55%,rgba(0,0,0,.5))}
+html[data-ascend-scene="challenges"] body{background:radial-gradient(circle at 50% 10%,rgba(155,52,32,.22),transparent 30rem),linear-gradient(180deg,#100605,#0b0707 55%,#040303)}html[data-ascend-scene="challenges"] body:before{background:repeating-linear-gradient(0deg,transparent 0 90px,rgba(198,92,65,.035) 91px 92px),radial-gradient(ellipse at 50% 40%,rgba(194,63,35,.12),transparent 48%)}
+html[data-ascend-scene="rankings"] body{background:radial-gradient(ellipse at 50% 0%,rgba(196,161,70,.2),transparent 36rem),linear-gradient(180deg,#0d0b07,#090806 58%,#040403)}html[data-ascend-scene="rankings"] body:before{background:linear-gradient(90deg,transparent 0 14%,rgba(218,190,121,.07) 14.2%,transparent 14.5% 85.5%,rgba(218,190,121,.07) 85.8%,transparent 86%),radial-gradient(ellipse at 50% 10%,rgba(215,189,122,.08),transparent 52%)}
+html[data-ascend-scene="achievements"] body{background:radial-gradient(circle at 50% 0%,rgba(112,82,151,.23),transparent 34rem),linear-gradient(180deg,#0b0710,#09070c 55%,#040307)}html[data-ascend-scene="achievements"] body:before{background:radial-gradient(circle at 22% 28%,rgba(184,157,225,.07) 0 1px,transparent 2px),radial-gradient(circle at 78% 42%,rgba(184,157,225,.06) 0 1px,transparent 2px),linear-gradient(180deg,rgba(91,73,111,.08),transparent 60%);background-size:180px 170px,240px 220px,auto}
+html[data-ascend-scene="relics"] body{background:radial-gradient(ellipse at 50% 0%,rgba(51,105,67,.22),transparent 34rem),linear-gradient(180deg,#061009,#070b08 55%,#030604)}html[data-ascend-scene="relics"] body:before{background:radial-gradient(circle at 20% 70%,rgba(119,181,106,.1),transparent 14rem),radial-gradient(circle at 80% 45%,rgba(119,181,106,.08),transparent 16rem),linear-gradient(180deg,rgba(53,102,63,.07),transparent 60%)}
+html[data-ascend-scene="profile"] body{background:radial-gradient(ellipse at 50% 0%,rgba(151,122,75,.17),transparent 32rem),linear-gradient(180deg,#0e0b07,#0a0907 55%,#040403)}html[data-ascend-scene="profile"] body:before{background:linear-gradient(90deg,transparent 15%,rgba(193,170,128,.045) 15.2%,transparent 15.5% 84.5%,rgba(193,170,128,.045) 84.8%,transparent 85%),linear-gradient(180deg,rgba(181,167,141,.07),transparent 58%)}
+html[data-ascend-scene="settings"] body{background:radial-gradient(circle at 50% 0%,rgba(62,116,151,.23),transparent 34rem),linear-gradient(180deg,#060d14,#080b0e 55%,#030506)}html[data-ascend-scene="settings"] body:before{background-image:radial-gradient(circle,rgba(168,203,224,.28) 0 1px,transparent 1.5px),linear-gradient(90deg,transparent 49.9%,rgba(168,203,224,.035) 50%,transparent 50.1%),linear-gradient(0deg,transparent 49.9%,rgba(168,203,224,.025) 50%,transparent 50.1%);background-size:145px 145px,100% 100%,100% 100%}
+html[data-ascend-scene="admin"] body{background:radial-gradient(ellipse at 50% 0%,rgba(126,42,55,.25),transparent 36rem),radial-gradient(circle at 100% 65%,rgba(86,45,70,.14),transparent 28rem),linear-gradient(180deg,#100507,#090506 60%,#030203)}html[data-ascend-scene="admin"] body:before{background:linear-gradient(90deg,transparent 0 18%,rgba(198,125,137,.05) 18.2%,transparent 18.5% 81.5%,rgba(198,125,137,.05) 81.8%,transparent 82%),repeating-linear-gradient(0deg,transparent 0 72px,rgba(198,125,137,.025) 73px 74px),radial-gradient(ellipse at 50% 15%,rgba(168,72,86,.1),transparent 45%)}
+html[data-ascend-scene="auth"] body{background:radial-gradient(circle at 50% 30%,rgba(184,154,90,.14),transparent 28rem),linear-gradient(180deg,#0b0906,#080706 60%,#030303)}
+html[data-ascend-scene] main{position:relative;isolation:isolate}html[data-ascend-scene] main:after{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.025),transparent 45%),linear-gradient(180deg,transparent 65%,rgba(0,0,0,.2));}
+html[data-ascend-scene="games"] .glass-panel{background:linear-gradient(145deg,rgba(8,25,31,.82),rgba(5,10,13,.92));border-color:rgba(111,174,190,.2)}html[data-ascend-scene="challenges"] .glass-panel{background:linear-gradient(145deg,rgba(30,9,7,.88),rgba(10,6,6,.94));border-color:rgba(201,109,79,.24)}html[data-ascend-scene="rankings"] .glass-panel{background:linear-gradient(145deg,rgba(31,26,17,.86),rgba(10,9,7,.94));border-color:rgba(201,178,125,.2)}html[data-ascend-scene="achievements"] .glass-panel{background:linear-gradient(145deg,rgba(23,16,34,.86),rgba(8,7,12,.94));border-color:rgba(169,154,208,.2)}html[data-ascend-scene="relics"] .glass-panel{background:linear-gradient(145deg,rgba(12,29,17,.86),rgba(6,10,7,.94));border-color:rgba(134,169,132,.2)}html[data-ascend-scene="profile"] .glass-panel{background:linear-gradient(145deg,rgba(31,25,17,.86),rgba(10,9,7,.94));border-color:rgba(181,167,141,.2)}html[data-ascend-scene="settings"] .glass-panel{background:linear-gradient(145deg,rgba(9,22,30,.88),rgba(6,9,12,.95));border-color:rgba(155,182,201,.2)}html[data-ascend-scene="admin"] .ascend-panel{background:linear-gradient(145deg,rgba(31,11,15,.88),rgba(9,5,7,.95));border-color:rgba(168,109,119,.2)}
+@keyframes world-dust{from{transform:translate3d(0,0,0)}to{transform:translate3d(35px,-55px,0)}}
+@media(prefers-reduced-motion:reduce){html[data-ascend-scene] body:after{animation:none}html[data-ascend-scene] *{scroll-behavior:auto!important}}
