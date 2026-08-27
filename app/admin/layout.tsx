@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { redirect } from 'next/navigation';
 import { checkAdminAuth } from '@/lib/auth';
+import { AdminShell } from '@/components/AdminShell';
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   const auth = await checkAdminAuth();
@@ -9,5 +10,5 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     redirect(auth.redirectUrl);
   }
 
-  return children;
+  return <AdminShell>{children}</AdminShell>;
 }
