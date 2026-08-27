@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import NavbarWrapper from '@/components/NavbarWrapper';
 import { Footer } from '@/components/Footer';
 import { getRecords, getGames, getAchievements, getChallenges, getRankings } from '@/lib/data/store';
 import { RecordSubmission, Game, Achievement, Challenge, Profile } from '@/lib/types';
-import { ShieldCheck, Users, Gamepad2, Trophy, Swords, FileCheck, ArrowRight, Activity, Settings, ScrollText } from 'lucide-react';
+import { ShieldCheck, Users, Gamepad2, Trophy, Swords, FileCheck, ArrowRight, Activity, Settings, ScrollText, RotateCw } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
+
+type LoadState = 'loading' | 'ready' | 'denied' | 'error';
 
 export default function AdminDashboardPage() {
   const [pendingRecords, setPendingRecords] = useState<RecordSubmission[]>([]);
@@ -15,45 +17,122 @@ export default function AdminDashboardPage() {
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [users, setUsers] = useState<Profile[]>([]);
-  const [authorized, setAuthorized] = useState<boolean | null>(null);
+  const [status, setStatus] = useState<LoadState>('loading');
+  const [loadError, setLoadError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let active = true;
-    const load = async () => {
+  const loadDashboard = useCallback(async () => {
+    setStatus('loading');
+    setLoadError(null);
+
+    try {
       const supabase = createClient();
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+      if (authError) throw new Error(`Authentication check failed: ${authError.message}`);
       if (!user) {
-        if (active) setAuthorized(false);
+        setStatus('denied');
         return;
       }
 
-      const { data: profile } = await supabase.from('profiles').select('is_admin').eq('id', user.id).maybeSingle();
-      const staff = profile?.is_admin === true;
-      if (!active) return;
-      setAuthorized(staff);
-      if (!staff) return;
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', user.id)
+        .maybeSingle();
 
-      const [records, gameData, achievementData, challengeData, rankingData] = await Promise.all([
-        getRecords('PENDING'), getGames(), getAchievements(), getChallenges(), getRankings(),
+      if (profileError) throw new Error(`Council permission check failed: ${profileError.message}`);
+      if (profile?.is_admin !== true) {
+        setStatus('denied');
+        return;
+      }
+
+      const results = await Promise.allSettled([
+        getRecords('PENDING'),
+        getGames(),
+        getAchievements(),
+        getChallenges(),
+        getRankings(),
       ]);
-      if (!active) return;
-      setPendingRecords(records);
-      setGames(gameData);
-      setAchievements(achievementData);
-      setChallenges(challengeData);
-      setUsers(rankingData);
-    };
-    void load().catch(() => active && setAuthorized(false));
-    return () => { active = false; };
+
+      const failures: string[] = [];
+      const [records, gameData, achievementData, challengeData, rankingData] = results;
+
+      if (records.status === 'fulfilled') setPendingRecords(records.value);
+      else failures.push('records');
+      if (gameData.status === 'fulfilled') setGames(gameData.value);
+      else failures.push('games');
+      if (achievementData.status === 'fulfilled') setAchievements(achievementData.value);
+      else failures.push('achievements');
+      if (challengeData.status === 'fulfilled') setChallenges(challengeData.value);
+      else failures.push('challenges');
+      if (rankingData.status === 'fulfilled') setUsers(rankingData.value);
+      else failures.push('roster');
+
+      if (failures.length > 0) {
+        setLoadError(`Some council instruments could not be synchronized: ${failures.join(', ')}.`);
+      }
+      setStatus('ready');
+    } catch (error) {
+      setLoadError(error instanceof Error ? error.message : 'The council chamber could not be synchronized.');
+      setStatus('error');
+    }
   }, []);
 
-  if (authorized === null) return <div className="min-h-screen bg-[#080706] text-[#e8ddc5] flex items-center justify-center"><div className="text-center"><div className="ascend-seal w-16 h-16 rounded-full mx-auto animate-pulse"><span className="relative z-10 text-xl text-[#d7bd7a]">✦</span></div><p className="mt-6 text-[9px] uppercase tracking-[.38em] text-[#806c45]">Opening the council chamber</p></div></div>;
-  if (!authorized) return <div className="min-h-screen bg-[#080706] text-[#e8ddc5] flex items-center justify-center"><div className="text-center ascend-reveal"><ShieldCheck className="w-12 h-12 mx-auto mb-4 text-[#722e35]" /><h1 className="ascend-display text-3xl">ACCESS DENIED</h1><p className="text-sm text-[#756d60] mt-2">Council permissions are required.</p><Link href="/" className="inline-flex items-center gap-2 mt-6 text-[10px] uppercase tracking-widest text-[#b89a5a]">Return to the world <ArrowRight className="w-3 h-3" /></Link></div></div>;
+  useEffect(() => {
+    void loadDashboard();
+  }, [loadDashboard]);
+
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-[#080706] text-[#e8ddc5] flex items-center justify-center overflow-hidden">
+        <div className="ascend-council-loading relative text-center">
+          <div className="absolute inset-1/2 w-56 h-56 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#722e35]/20 animate-spin [animation-duration:12s]" />
+          <div className="ascend-seal w-20 h-20 rounded-full mx-auto grid place-items-center"><span className="relative z-10 text-2xl text-[#d7bd7a]">◈</span></div>
+          <div className="mt-7 text-[9px] uppercase tracking-[.42em] text-[#806c45]">Opening the council chamber</div>
+          <div className="mt-3 text-[10px] uppercase tracking-[.2em] text-[#4f4740]">Verifying the Inner Council seal</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (status === 'denied') {
+    return (
+      <div className="min-h-screen bg-[#080706] text-[#e8ddc5] flex items-center justify-center">
+        <div className="text-center ascend-reveal max-w-md px-6">
+          <ShieldCheck className="w-12 h-12 mx-auto mb-4 text-[#722e35]" />
+          <h1 className="ascend-display text-3xl">ACCESS DENIED</h1>
+          <p className="text-sm text-[#756d60] mt-2">Council permissions are required for this chamber.</p>
+          <Link href="/" className="inline-flex items-center gap-2 mt-6 text-[10px] uppercase tracking-widest text-[#b89a5a]">Return to the world <ArrowRight className="w-3 h-3" /></Link>
+        </div>
+      </div>
+    );
+  }
+
+  if (status === 'error') {
+    return (
+      <div className="min-h-screen bg-[#080706] text-[#e8ddc5] flex items-center justify-center">
+        <div className="text-center ascend-reveal max-w-lg px-6">
+          <div className="w-16 h-16 mx-auto mb-5 grid place-items-center rounded-full border border-[#722e35]/40 bg-[#722e35]/10 text-[#b26b72]"><ShieldCheck className="w-7 h-7" /></div>
+          <div className="text-[9px] uppercase tracking-[.4em] text-[#806c45]">Council synchronization failed</div>
+          <h1 className="ascend-display text-3xl mt-3">THE CHAMBER IS SEALED</h1>
+          <p className="text-sm text-[#756d60] mt-3 leading-6">{loadError}</p>
+          <button type="button" onClick={() => void loadDashboard()} className="inline-flex items-center gap-2 mt-7 border border-[#b89a5a]/25 px-5 py-3 text-[10px] uppercase tracking-[.18em] text-[#cbb783] hover:border-[#b89a5a]/55 transition-colors"><RotateCw className="w-3.5 h-3.5" /> Retry synchronization</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen text-[#e8ddc5] flex flex-col">
       <NavbarWrapper />
       <main className="flex-1 max-w-7xl mx-auto px-5 sm:px-8 py-12 w-full">
+        {loadError && (
+          <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border border-[#b89a5a]/20 bg-[#b89a5a]/[.035] px-4 py-3 text-[10px] uppercase tracking-[.12em] text-[#9b8a67]">
+            <span>{loadError}</span>
+            <button type="button" onClick={() => void loadDashboard()} className="inline-flex items-center gap-2 text-[#d7bd7a] hover:text-[#efe0b7]"><RotateCw className="w-3 h-3" /> Resync</button>
+          </div>
+        )}
+
         <section className="ascend-reveal relative overflow-hidden border border-[#b89a5a]/20 bg-[#0b0a09]/75 p-7 sm:p-10 mb-8">
           <div className="absolute -right-16 -top-24 text-[15rem] ascend-display text-[#b89a5a]/[.025] select-none">✦</div>
           <div className="relative flex flex-col lg:flex-row lg:items-end justify-between gap-7">
