@@ -27,8 +27,29 @@ const scenes: Array<[string, Scene]> = [
 function getScene(pathname:string):Scene{return scenes.find(([prefix])=>pathname===prefix||pathname.startsWith(`${prefix}/`))?.[1]??{eyebrow:'THE ORDER',title:'THE FIRST AWAKENING',subtitle:'The world stirs beyond the veil.',tone:'home',effect:'awakening',symbol:'✦',chapter:'X'};}
 
 export function CinematicTransition(){
- const pathname=usePathname(); const [visible,setVisible]=useState(true); const [scene,setScene]=useState(()=>getScene(pathname)); const firstRender=useRef(true); const timerRef=useRef<number|null>(null);
- useEffect(()=>{const nextScene=getScene(pathname); const duration=firstRender.current?1200:850; firstRender.current=false; setScene(nextScene); setVisible(true); document.documentElement.dataset.ascendScene=nextScene.tone; document.documentElement.dataset.ascendEffect=nextScene.effect; if(timerRef.current!==null)window.clearTimeout(timerRef.current); timerRef.current=window.setTimeout(()=>setVisible(false),duration); return()=>{if(timerRef.current!==null)window.clearTimeout(timerRef.current);};},[pathname]);
- if(!visible)return null; const style={'--cin-duration':'1200ms'} as CSSProperties;
- return <div className={`ascend-cinematic ascend-cinematic--${scene.tone} ascend-cinematic--effect-${scene.effect}`} style={style} aria-hidden="true"><div className="ascend-cinematic__veil"/><div className="ascend-cinematic__scene"/><div className="ascend-cinematic__effect"><i/><i/><i/><i/><i/><i/></div><div className="ascend-cinematic__sigil"><span>{scene.chapter}</span></div><div className="ascend-cinematic__content"><div className="ascend-cinematic__seal">{scene.symbol}</div><div className="ascend-cinematic__eyebrow">{scene.eyebrow}</div><h1>{scene.title}</h1><p>{scene.subtitle}</p><div className="ascend-cinematic__line"/></div></div>;
+ const pathname=usePathname();
+ const [visible,setVisible]=useState(true);
+ const [scene,setScene]=useState(()=>getScene(pathname));
+ const [transitionId,setTransitionId]=useState(0);
+ const firstRender=useRef(true);
+ const timerRef=useRef<number|null>(null);
+
+ useEffect(()=>{
+  const nextScene=getScene(pathname);
+  const duration=firstRender.current?1200:850;
+  firstRender.current=false;
+  setScene(nextScene);
+  setTransitionId(id=>id+1);
+  setVisible(true);
+  document.documentElement.dataset.ascendScene=nextScene.tone;
+  document.documentElement.dataset.ascendEffect=nextScene.effect;
+  if(timerRef.current!==null)window.clearTimeout(timerRef.current);
+  timerRef.current=window.setTimeout(()=>setVisible(false),duration);
+  return()=>{if(timerRef.current!==null)window.clearTimeout(timerRef.current);};
+ },[pathname]);
+
+ if(!visible)return null;
+ const duration=firstRender.current?'1200ms':'850ms';
+ const style={'--cin-duration':duration} as CSSProperties;
+ return <div key={`${pathname}-${transitionId}`} className={`ascend-cinematic ascend-cinematic--${scene.tone} ascend-cinematic--effect-${scene.effect}`} style={style} aria-hidden="true"><div className="ascend-cinematic__veil"/><div className="ascend-cinematic__scene"/><div className="ascend-cinematic__effect"><i/><i/><i/><i/><i/><i/></div><div className="ascend-cinematic__sigil"><span>{scene.chapter}</span></div><div className="ascend-cinematic__content"><div className="ascend-cinematic__seal">{scene.symbol}</div><div className="ascend-cinematic__eyebrow">{scene.eyebrow}</div><h1>{scene.title}</h1><p>{scene.subtitle}</p><div className="ascend-cinematic__line"/></div></div>;
 }
