@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { usePathname } from 'next/navigation';
 
 type SceneTone =
@@ -45,15 +45,7 @@ const scenes: Array<[string, Omit<Scene, 'tone'> & { tone: SceneTone }]> = [
 function getScene(pathname: string): Scene {
   const match = scenes.find(([prefix]) => pathname === prefix || pathname.startsWith(`${prefix}/`));
   if (match) return match[1];
-  return {
-    eyebrow: 'THE ORDER',
-    title: 'ENTERING THE CHAMBER',
-    subtitle: 'The threshold opens.',
-    tone: 'home',
-    symbol: '✦',
-    duration: 3200,
-    chapter: 'X',
-  };
+  return { eyebrow: 'THE ORDER', title: 'ENTERING THE CHAMBER', subtitle: 'The threshold opens.', tone: 'home', symbol: '✦', duration: 3200, chapter: 'X' };
 }
 
 export function CinematicTransition() {
@@ -82,12 +74,10 @@ export function CinematicTransition() {
 
   if (!visible) return null;
 
+  const cinematicStyle = { '--cin-duration': `${scene.duration}ms` } as CSSProperties;
+
   return (
-    <div
-      className={`ascend-cinematic ascend-cinematic--${scene.tone}`}
-      role="presentation"
-      style={{ '--cin-duration': `${scene.duration}ms` } as React.CSSProperties}
-    >
+    <div className={`ascend-cinematic ascend-cinematic--${scene.tone}`} role="presentation" style={cinematicStyle}>
       <div className="ascend-cinematic__backdrop" />
       <div className="ascend-cinematic__architecture" aria-hidden="true">
         <div className="ascend-cinematic__ceiling" />
@@ -102,7 +92,6 @@ export function CinematicTransition() {
         <div className="ascend-cinematic__portal-ring ascend-cinematic__portal-ring--one" />
         <div className="ascend-cinematic__portal-ring ascend-cinematic__portal-ring--two" />
       </div>
-
       <div className="ascend-cinematic__doors" aria-hidden="true">
         <div className="ascend-cinematic__door ascend-cinematic__door--left">
           <div className="ascend-cinematic__door-frame" />
@@ -115,12 +104,10 @@ export function CinematicTransition() {
           <div className="ascend-cinematic__door-handle" />
         </div>
       </div>
-
       <div className="ascend-cinematic__sigil" aria-hidden="true"><span>{scene.chapter}</span></div>
       <div className="ascend-cinematic__fog ascend-cinematic__fog--back" />
       <div className="ascend-cinematic__fog ascend-cinematic__fog--mid" />
       <div className="ascend-cinematic__fog ascend-cinematic__fog--front" />
-
       <div className="ascend-cinematic__content">
         <div className="ascend-cinematic__seal"><span>{scene.symbol}</span></div>
         <div className="ascend-cinematic__eyebrow">{scene.eyebrow}</div>
@@ -128,10 +115,7 @@ export function CinematicTransition() {
         <p className="ascend-cinematic__subtitle">{scene.subtitle}</p>
         <div className="ascend-cinematic__line" />
       </div>
-
-      <button type="button" onClick={() => setVisible(false)} className="ascend-cinematic__skip">
-        Enter chamber
-      </button>
+      <button type="button" onClick={() => setVisible(false)} className="ascend-cinematic__skip">Enter chamber</button>
     </div>
   );
 }
