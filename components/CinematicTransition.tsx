@@ -24,7 +24,16 @@ const scenes: Array<[string, Scene]> = [
   ['/verify-email',{eyebrow:'THE VERIFICATION CHAMBER',title:'PROVE THE SEAL',subtitle:'One final mark before the Order recognizes you.',tone:'auth',effect:'threshold',symbol:'∴',chapter:'IX'}],
 ];
 
-function getScene(pathname:string):Scene{return scenes.find(([prefix])=>pathname===prefix||pathname.startsWith(`${prefix}/`))?.[1]??{eyebrow:'THE ORDER',title:'THE FIRST AWAKENING',subtitle:'The world stirs beyond the veil.',tone:'home',effect:'awakening',symbol:'✦',chapter:'X'};}
+function getScene(pathname:string):Scene {
+  // The Council cinematic belongs exclusively to the admin dashboard.
+  // Admin sub-pages keep their normal page transitions instead of replaying it.
+  if (pathname === '/admin') {
+    return scenes.find(([prefix]) => prefix === '/admin')![1];
+  }
+
+  return scenes.find(([prefix]) => prefix !== '/admin' && (pathname === prefix || pathname.startsWith(`${prefix}/`)))?.[1]
+    ?? {eyebrow:'THE ORDER',title:'THE FIRST AWAKENING',subtitle:'The world stirs beyond the veil.',tone:'home',effect:'awakening',symbol:'✦',chapter:'X'};
+}
 
 // Temporary test mode: every visit gets the full, large cinematic treatment.
 // Once the visuals are approved, this can be switched to first-visit vs. repeat-visit durations.
