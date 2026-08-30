@@ -415,7 +415,7 @@ export async function getRecords(status?: string): Promise<RecordSubmission[]> {
   const supabase = createClient();
   let query = supabase
     .from('records')
-    .select('*, profiles(username, avatar_url), games(title)')
+    .select('*, profiles!records_user_id_fkey(username, avatar_url), games!records_game_id_fkey(title)')
     .order('submitted_at', { ascending: false });
 
   if (status) query = query.eq('status', status);
@@ -461,7 +461,7 @@ export async function submitRecord(
       evidence_url: record.evidence_url,
       status: 'PENDING',
     })
-    .select('*, profiles(username, avatar_url), games(title)')
+    .select('*, profiles!records_user_id_fkey(username, avatar_url), games!records_game_id_fkey(title)')
     .single();
 
   if (error) throw error;
