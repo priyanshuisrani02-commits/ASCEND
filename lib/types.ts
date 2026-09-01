@@ -77,6 +77,27 @@ export interface Challenge {
   created_at: string;
   user_joined?: boolean;
   user_completed?: boolean;
+  is_boss?: boolean;
+  boss_name?: string | null;
+  boss_lore?: string | null;
+  boss_phase_count?: number;
+  boss_risk_multiplier?: number;
+}
+
+export interface Discovery {
+  id: string;
+  game_id: string;
+  slug: string;
+  title: string;
+  teaser: string;
+  reveal_text: string;
+  discovery_type: 'SECRET' | 'RELIC' | 'LORE' | 'LANDMARK';
+  rarity: AchievementRarity;
+  xp_reward: number;
+  is_active: boolean;
+  created_at: string;
+  discovered?: boolean;
+  discovered_at?: string;
 }
 
 export interface RecordSubmission {
