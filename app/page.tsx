@@ -8,6 +8,7 @@ import { getActivities } from '@/lib/data/store';
 import { Button } from '@/components/ui/Button';
 import { Footer } from '@/components/Footer';
 import NavbarWrapper from '@/components/NavbarWrapper';
+import { WorldAtlas } from '@/components/WorldAtlas';
 
 const destinations = [
   { title: 'The Territories', eyebrow: 'THE KNOWN WORLD', desc: 'Enter the games recorded by the Order. Every territory holds its own trials, deeds and legends.', href: '/games', icon: Compass },
@@ -63,6 +64,8 @@ export default function HomePage() {
             {destinations.map((destination, index) => { const Icon = destination.icon; return <Link key={destination.href} href={destination.href} className="group ascend-panel ascend-panel-hover min-h-64 p-7 sm:p-9 relative overflow-hidden"><div className="absolute -right-8 -top-8 text-[9rem] ascend-display text-[#b89a5a]/[.025] group-hover:text-[#b89a5a]/[.06] transition-colors">0{index + 1}</div><div className="relative h-full flex flex-col justify-between"><div><div className="flex items-center justify-between mb-10"><span className="text-[9px] uppercase tracking-[.3em] text-[#806c45]">{destination.eyebrow}</span><Icon className="w-5 h-5 text-[#6c614e] group-hover:text-[#b89a5a] transition-colors" /></div><h3 className="ascend-display text-2xl sm:text-3xl text-[#e8ddc5] group-hover:text-[#d7bd7a] transition-colors">{destination.title}</h3><p className="text-sm text-[#756d60] leading-6 mt-3 max-w-md">{destination.desc}</p></div><div className="flex items-center gap-2 mt-8 text-[9px] uppercase tracking-[.25em] text-[#7d6b48] group-hover:text-[#d7bd7a] transition-colors">Enter chamber <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" /></div></div></Link>; })}
           </div>
         </section>
+
+        <WorldAtlas />
 
         <section className="border-y border-[#b89a5a]/10 bg-[#0b0a09] py-5 overflow-hidden"><div className="max-w-6xl mx-auto px-5 sm:px-8 flex items-center gap-5"><div className="shrink-0 flex items-center gap-2 text-[9px] uppercase tracking-[.3em] text-[#806c45]"><Activity className="w-3.5 h-3.5" /> Recent Deeds</div><div className="h-4 w-px bg-[#b89a5a]/15" /><div className="overflow-hidden flex-1">{activities.length ? <div className="flex gap-10 w-max ascend-marquee">{[...activities, ...activities].map((activity, index) => <div key={`${activity.id}-${index}`} className="flex items-center gap-3 text-xs whitespace-nowrap"><span className="text-[#d2c5a9]">{activity.username}</span><span className="text-[#5f594f]">recorded</span><span className="text-[#b89a5a]">{activity.title}</span></div>)}</div> : <div className="text-xs text-[#5f594f]">The records are quiet. Your deed could be the first.</div>}</div></div></section>
 
