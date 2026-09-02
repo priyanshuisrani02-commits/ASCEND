@@ -5,6 +5,7 @@ import "./cinematic.css";
 import "./worlds.css";
 import "./motion.css";
 import "./effects.css";
+import "./landing.css";
 import { CinematicTransition } from "@/components/CinematicTransition";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
