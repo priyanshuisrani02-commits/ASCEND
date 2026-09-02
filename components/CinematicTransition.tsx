@@ -25,18 +25,11 @@ const scenes: Array<[string, Scene]> = [
 ];
 
 function getScene(pathname:string):Scene {
-  // The Council cinematic belongs exclusively to the admin dashboard.
-  // Admin sub-pages keep their normal page transitions instead of replaying it.
-  if (pathname === '/admin') {
-    return scenes.find(([prefix]) => prefix === '/admin')![1];
-  }
-
+  if (pathname === '/admin') return scenes.find(([prefix]) => prefix === '/admin')![1];
   return scenes.find(([prefix]) => prefix !== '/admin' && (pathname === prefix || pathname.startsWith(`${prefix}/`)))?.[1]
     ?? {eyebrow:'THE ORDER',title:'THE FIRST AWAKENING',subtitle:'The world stirs beyond the veil.',tone:'home',effect:'awakening',symbol:'✦',chapter:'X'};
 }
 
-// Temporary test mode: every visit gets the full, large cinematic treatment.
-// Once the visuals are approved, this can be switched to first-visit vs. repeat-visit durations.
 const FULL_CINEMATIC_DURATION = 1800;
 
 export function CinematicTransition(){
@@ -50,14 +43,16 @@ export function CinematicTransition(){
   const nextScene=getScene(pathname);
   setScene(nextScene);
   setTransitionId(id=>id+1);
-  setVisible(true);
+  setVisible(pathname !== '/');
   document.documentElement.dataset.ascendScene=nextScene.tone;
   document.documentElement.dataset.ascendEffect=nextScene.effect;
   if(timerRef.current!==null)window.clearTimeout(timerRef.current);
-  timerRef.current=window.setTimeout(()=>setVisible(false),FULL_CINEMATIC_DURATION);
+  if(pathname !== '/') timerRef.current=window.setTimeout(()=>setVisible(false),FULL_CINEMATIC_DURATION);
   return()=>{if(timerRef.current!==null)window.clearTimeout(timerRef.current);};
  },[pathname]);
 
+ // The title screen has its own full-screen film sequence.
+ if(pathname === '/') return null;
  if(!visible)return null;
  const style={'--cin-duration':`${FULL_CINEMATIC_DURATION}ms`} as CSSProperties;
  return <div key={`${pathname}-${transitionId}`} className={`ascend-cinematic ascend-cinematic--${scene.tone} ascend-cinematic--effect-${scene.effect} ascend-cinematic--full`} style={style} aria-hidden="true"><div className="ascend-cinematic__veil"/><div className="ascend-cinematic__scene"/><div className="ascend-cinematic__effect"><i/><i/><i/><i/><i/><i/></div><div className="ascend-cinematic__sigil"><span>{scene.chapter}</span></div><div className="ascend-cinematic__content"><div className="ascend-cinematic__seal">{scene.symbol}</div><div className="ascend-cinematic__eyebrow">{scene.eyebrow}</div><h1>{scene.title}</h1><p>{scene.subtitle}</p><div className="ascend-cinematic__line"/></div></div>;
