@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type MutableRefObject } from 'react';
 import { useRouter } from 'next/navigation';
 
-function startAmbientSound(contextRef: React.MutableRefObject<AudioContext | null>) {
+function startAmbientSound(contextRef: MutableRefObject<AudioContext | null>) {
   if (typeof window === 'undefined') return;
   const AudioContextClass = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
   if (!AudioContextClass) return;
@@ -19,8 +19,7 @@ function startAmbientSound(contextRef: React.MutableRefObject<AudioContext | nul
     filter.connect(master);
     master.connect(ctx.destination);
 
-    const notes = [55, 82.41, 110];
-    notes.forEach((frequency, index) => {
+    [55, 82.41, 110].forEach((frequency, index) => {
       const oscillator = ctx.createOscillator();
       const gain = ctx.createGain();
       oscillator.type = index === 0 ? 'sine' : 'triangle';
@@ -84,7 +83,6 @@ export default function HomePage() {
       <div className="ascend-landing__sky" />
       <div className="ascend-landing__sun" />
       <div className="ascend-landing__beam" />
-
       <div className="ascend-landing__mountain ascend-landing__mountain--left" />
       <div className="ascend-landing__mountain ascend-landing__mountain--far" />
       <div className="ascend-landing__mountain ascend-landing__mountain--right" />
@@ -103,32 +101,20 @@ export default function HomePage() {
 
       <div className="ascend-landing__particles" aria-hidden="true">
         {particles.map((particle, index) => (
-          <i
-            key={index}
-            className="ascend-landing__particle"
-            style={{
-              '--x': particle.x,
-              '--y': particle.y,
-              '--s': particle.size,
-              '--d': particle.duration,
-              '--delay': particle.delay,
-              '--dx': particle.dx,
-            } as CSSProperties}
-          />
+          <i key={index} className="ascend-landing__particle" style={{
+            '--x': particle.x, '--y': particle.y, '--s': particle.size,
+            '--d': particle.duration, '--delay': particle.delay, '--dx': particle.dx,
+          } as CSSProperties} />
         ))}
       </div>
 
-      <div className="ascend-landing__sigil" aria-hidden="true">
-        <span className="ascend-landing__sigil-mark">✦</span>
-      </div>
+      <div className="ascend-landing__sigil" aria-hidden="true"><span className="ascend-landing__sigil-mark">✦</span></div>
 
       <section className="ascend-landing__content">
         <div className="ascend-landing__eyebrow">THE VEIL HAS OPENED</div>
         <h1 className="ascend-landing__title">ASCEND</h1>
         <div className="ascend-landing__subtitle">Beyond the known lies what remembers you</div>
-        <button type="button" className="ascend-landing__enter" onClick={enterRealm} disabled={entering}>
-          Enter the field of unknown
-        </button>
+        <button type="button" className="ascend-landing__enter" onClick={enterRealm} disabled={entering}>Enter the field of unknown</button>
         <div className="ascend-landing__crest" aria-hidden="true">✦ &nbsp; THE ORDER &nbsp; ✦</div>
       </section>
 
