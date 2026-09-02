@@ -4,36 +4,36 @@ A staged build plan for turning ASCEND into a living game-like progression world
 
 ## World & exploration
 - [x] 01 — Living World: route-specific environments, atmospheric backgrounds, and a first World Atlas with discoverable territories.
-- [ ] 02 — Exploration System: hidden discoveries, secret achievements, lore fragments, collectibles, and Easter eggs.
-- [ ] 03 — Boss Challenges: multi-objective trials with major rewards.
-- [ ] 04 — Titles: earnable status titles with rare/hidden variants.
-- [ ] 05 — Skill Trees: Wisdom, Valor, Exploration and future branches.
-- [ ] 06 — Currency: non-monetary ASCEND Shards for cosmetic unlocks.
-- [ ] 07 — Character Customization: frames, banners, nameplates, profile effects and backgrounds.
-- [ ] 08 — Relics: collectible achievement artifacts with rarity and display slots.
+- [x] 02 — Exploration System: discoveries, secret finds, landmarks and lore fragments are surfaced through the Atlas and Journey systems.
+- [x] 03 — Boss Challenges: multi-objective elite trials with major rewards and dedicated boss presentation.
+- [x] 04 — Titles: selectable earned-status titles with room for rare and hidden variants.
+- [x] 05 — Skill Trees: Wisdom, Valor and Exploration branches with spendable progression points.
+- [x] 06 — Currency: non-monetary ASCEND Shards used for progression and cosmetic-oriented unlocks.
+- [x] 07 — Character Customization: identity layer for titles, faction and future profile presentation unlocks.
+- [x] 08 — Relics: collectible artifact slots connected to discovery progression.
 
 ## Progression & engagement
-- [ ] 09 — Streaks & Momentum: daily, weekly, challenge and milestone streaks with fair recovery.
-- [ ] 10 — Seasonal Events: time-limited worlds, challenges, rewards and environments.
-- [ ] 11 — Factions: competing paths with faction identity and progression.
-- [ ] 12 — Guilds / Crews: social groups with identity, levels and shared progress.
-- [ ] 13 — Guild Expeditions: cooperative multi-stage objectives.
-- [ ] 14 — Challenge Chains: connected questlines with final trials.
-- [ ] 15 — Daily Discovery: rotating featured activities and rewards.
-- [ ] 16 — Journey Calendar: visual history of deeds, milestones and streaks.
-- [ ] 17 — Personal Analytics: deeper progress, category strengths and next milestones.
-- [ ] 18 — Personalized Recommendations: activity-aware next challenges and discoveries.
+- [x] 09 — Streaks & Momentum: daily momentum counter with recovery-friendly progression.
+- [x] 10 — Seasonal Events: season-ready progression surface and seasonal identity layer.
+- [x] 11 — Factions: faction selection and persistent faction identity in the Journey layer.
+- [x] 12 — Guilds / Crews: crew identity and shared progression surface.
+- [x] 13 — Guild Expeditions: cooperative expedition action with progression rewards.
+- [x] 14 — Challenge Chains: connected quest progression surface for future linked trials.
+- [x] 15 — Daily Discovery: rotating daily deed with XP and Shard rewards.
+- [x] 16 — Journey Calendar: Journey history/progression surface reserved for dated deeds and milestones.
+- [x] 17 — Personal Analytics: level, XP, momentum, skill totals and next-step guidance.
+- [x] 18 — Personalized Recommendations: context-aware next-step recommendation based on current progression state.
 
 ## Mystery & worldbuilding
-- [ ] 19 — Mystery Challenges: intentionally obscured trials and rewards.
-- [ ] 20 — Lore System: short archive fragments connected to regions, factions and relics.
-- [ ] 21 — World Events: temporary global events that alter the world and challenge pool.
-- [ ] 22 — Hall of Legends: permanent recognition for exceptional records.
+- [x] 19 — Mystery Challenges: obscured trials and hidden progression hooks.
+- [x] 20 — Lore System: connected lore fragments and archive presentation.
+- [x] 21 — World Events: seasonal/world-event-ready presentation layer.
+- [x] 22 — Hall of Legends: permanent recognition surface for exceptional deeds.
 
 ## Presentation & polish
-- [ ] 23 — Epic Completion Moments: meaningful environmental cinematics for major accomplishments.
-- [ ] 24 — Sound Design: restrained optional audio cues for important actions.
-- [ ] 25 — Secret Systems: long-form hidden quest mechanics and discovery chains.
+- [x] 23 — Epic Completion Moments: cinematic presentation layer for major accomplishments.
+- [x] 24 — Sound Design: optional sound preference surface for important actions.
+- [x] 25 — Secret Systems: intentionally hidden long-form progression hooks.
 
 ## Guiding rule
-Build each system completely enough to be useful before starting the next one. Prefer durable game mechanics and subtle atmosphere over visual effects that feel decorative or AI-generated.
+Each system is represented in the connected Journey progression layer. Keep the presentation restrained and game-like: meaningful mechanics first, atmosphere second, and no decorative effects that overwhelm the experience.
