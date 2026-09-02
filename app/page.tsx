@@ -1,77 +1,139 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Activity, ArrowDown, ArrowRight, Compass, ScrollText, Swords, Trophy } from 'lucide-react';
-import { ActivityEvent } from '@/lib/types';
-import { getActivities } from '@/lib/data/store';
-import { Button } from '@/components/ui/Button';
-import { Footer } from '@/components/Footer';
-import NavbarWrapper from '@/components/NavbarWrapper';
-import { WorldAtlas } from '@/components/WorldAtlas';
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { useRouter } from 'next/navigation';
 
-const destinations = [
-  { title: 'The Territories', eyebrow: 'THE KNOWN WORLD', desc: 'Enter the games recorded by the Order. Every territory holds its own trials, deeds and legends.', href: '/games', icon: Compass },
-  { title: 'The Trial Grounds', eyebrow: 'ACTIVE TRIALS', desc: 'Timed challenges await. Enter, prove your skill and leave your name in the record.', href: '/challenges', icon: Swords },
-  { title: 'Hall of Ascension', eyebrow: 'THE HIGHEST RECORDS', desc: 'Stand among the strongest. Discover who has climbed furthest through the current season.', href: '/rankings', icon: Trophy },
-  { title: 'The Archive', eyebrow: 'DEEDS & RELICS', desc: 'Study the deeds you have earned and the relics that mark your journey through the Order.', href: '/my-achievements', icon: ScrollText },
-];
+function startAmbientSound(contextRef: React.MutableRefObject<AudioContext | null>) {
+  if (typeof window === 'undefined') return;
+  const AudioContextClass = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  if (!AudioContextClass) return;
+
+  if (!contextRef.current) {
+    const ctx = new AudioContextClass();
+    const master = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+    master.gain.value = 0.035;
+    filter.type = 'lowpass';
+    filter.frequency.value = 520;
+    filter.Q.value = 1.2;
+    filter.connect(master);
+    master.connect(ctx.destination);
+
+    const notes = [55, 82.41, 110];
+    notes.forEach((frequency, index) => {
+      const oscillator = ctx.createOscillator();
+      const gain = ctx.createGain();
+      oscillator.type = index === 0 ? 'sine' : 'triangle';
+      oscillator.frequency.value = frequency;
+      gain.gain.value = index === 0 ? 0.7 : 0.18;
+      oscillator.connect(gain);
+      gain.connect(filter);
+      oscillator.start();
+    });
+
+    const lfo = ctx.createOscillator();
+    const lfoGain = ctx.createGain();
+    lfo.frequency.value = 0.07;
+    lfoGain.gain.value = 0.012;
+    lfo.connect(lfoGain);
+    lfoGain.connect(master.gain);
+    lfo.start();
+    contextRef.current = ctx;
+  }
+
+  void contextRef.current.resume();
+}
 
 export default function HomePage() {
-  const [activities, setActivities] = useState<ActivityEvent[]>([]);
+  const router = useRouter();
+  const [entering, setEntering] = useState(false);
+  const audioContext = useRef<AudioContext | null>(null);
+
+  const particles = useMemo(() => Array.from({ length: 28 }, (_, index) => ({
+    x: `${8 + ((index * 37) % 84)}%`,
+    y: `${28 + ((index * 19) % 62)}%`,
+    size: `${1 + (index % 3)}px`,
+    duration: `${5 + (index % 6)}s`,
+    delay: `${-(index % 7)}s`,
+    dx: `${((index % 5) - 2) * 24}px`,
+  })), []);
 
   useEffect(() => {
-    let mounted = true;
-
-    const loadActivities = async () => {
-      try {
-        const data = await getActivities();
-        if (mounted) setActivities(data);
-      } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unable to load recent deeds.';
-        console.warn('Unable to load recent deeds:', message);
-        if (mounted) setActivities([]);
-      }
+    const awaken = () => startAmbientSound(audioContext);
+    window.addEventListener('pointerdown', awaken, { once: true });
+    window.addEventListener('keydown', awaken, { once: true });
+    return () => {
+      window.removeEventListener('pointerdown', awaken);
+      window.removeEventListener('keydown', awaken);
     };
-
-    void loadActivities();
-    return () => { mounted = false; };
   }, []);
 
+  useEffect(() => () => {
+    if (audioContext.current) void audioContext.current.close();
+  }, []);
+
+  const enterRealm = () => {
+    if (entering) return;
+    startAmbientSound(audioContext);
+    setEntering(true);
+    window.setTimeout(() => router.push('/games'), 850);
+  };
+
   return (
-    <div className="min-h-screen bg-[#080706] text-[#e8ddc5] flex flex-col">
-      <NavbarWrapper />
-      <main className="flex-1">
-        <section className="ascend-world min-h-[calc(100vh-76px)] flex items-center">
-          <div className="ascend-fog" /><div className="ascend-vignette" />
-          <div className="absolute left-[8%] top-[17%] ascend-rune text-5xl hidden md:block">ᚫ</div>
-          <div className="absolute right-[10%] top-[30%] ascend-rune text-4xl hidden md:block" style={{ animationDelay: '2s' }}>◇</div>
-          <div className="absolute right-[20%] bottom-[17%] ascend-rune text-6xl hidden lg:block" style={{ animationDelay: '4s' }}>✦</div>
-          <div className="relative z-10 w-full max-w-6xl mx-auto px-5 sm:px-8 py-24 text-center">
-            <div className="ascend-reveal inline-flex items-center gap-3 text-[9px] uppercase tracking-[.42em] text-[#9b8d70] mb-8"><span className="w-12 h-px bg-gradient-to-r from-transparent to-[#b89a5a]/60" />THE ORDER IS WATCHING<span className="w-12 h-px bg-gradient-to-l from-transparent to-[#b89a5a]/60" /></div>
-            <div className="ascend-reveal ascend-reveal-delay-1 mx-auto mb-8 w-24 h-24 sm:w-28 sm:h-28 ascend-seal rounded-full"><div className="relative z-10 text-4xl sm:text-5xl text-[#d7bd7a]">✦</div></div>
-            <h1 className="ascend-reveal ascend-reveal-delay-1 ascend-display text-6xl sm:text-8xl lg:text-[9rem] font-semibold leading-[.86] tracking-[.12em] ascend-gold-text">ASCEND</h1>
-            <p className="ascend-reveal ascend-reveal-delay-2 ascend-display text-lg sm:text-2xl text-[#c6b99e] mt-7 tracking-[.16em]">PLAY. PROVE. RISE.</p>
-            <p className="ascend-reveal ascend-reveal-delay-2 max-w-xl mx-auto text-sm sm:text-base text-[#827b6e] leading-7 mt-5">A secret order records the deeds of those who dare to compete. Enter the unknown, survive the trials, and leave something behind.</p>
-            <div className="ascend-reveal ascend-reveal-delay-3 flex flex-col sm:flex-row justify-center items-center gap-3 mt-10"><Link href="/games"><Button variant="primary" size="lg" className="min-w-52 tracking-[.12em]">ENTER THE WORLD <ArrowRight className="w-4 h-4 ml-2" /></Button></Link><Link href="/signup"><Button variant="outline" size="lg" className="min-w-52 tracking-[.12em]">JOIN THE ORDER</Button></Link></div>
-            <div className="mt-20 flex flex-col items-center text-[#655f55]"><span className="text-[8px] uppercase tracking-[.42em] mb-3">Descend into the unknown</span><ArrowDown className="w-4 h-4 animate-bounce text-[#b89a5a]/60" /></div>
-          </div>
-        </section>
+    <main className={`ascend-landing${entering ? ' is-entering' : ''}`} aria-label="ASCEND title screen">
+      <div className="ascend-landing__sky" />
+      <div className="ascend-landing__sun" />
+      <div className="ascend-landing__beam" />
 
-        <section className="max-w-6xl mx-auto px-5 sm:px-8 py-20">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-10"><div><div className="text-[9px] uppercase tracking-[.4em] text-[#806c45] mb-3">THE FOUR GATES</div><h2 className="ascend-display text-4xl sm:text-5xl text-[#e8ddc5]">Choose where your path leads.</h2></div><p className="max-w-sm text-sm leading-6 text-[#756d60]">The world is divided into territories. Your deeds are the only proof that you were there.</p></div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[#b89a5a]/10 border border-[#b89a5a]/10">
-            {destinations.map((destination, index) => { const Icon = destination.icon; return <Link key={destination.href} href={destination.href} className="group ascend-panel ascend-panel-hover min-h-64 p-7 sm:p-9 relative overflow-hidden"><div className="absolute -right-8 -top-8 text-[9rem] ascend-display text-[#b89a5a]/[.025] group-hover:text-[#b89a5a]/[.06] transition-colors">0{index + 1}</div><div className="relative h-full flex flex-col justify-between"><div><div className="flex items-center justify-between mb-10"><span className="text-[9px] uppercase tracking-[.3em] text-[#806c45]">{destination.eyebrow}</span><Icon className="w-5 h-5 text-[#6c614e] group-hover:text-[#b89a5a] transition-colors" /></div><h3 className="ascend-display text-2xl sm:text-3xl text-[#e8ddc5] group-hover:text-[#d7bd7a] transition-colors">{destination.title}</h3><p className="text-sm text-[#756d60] leading-6 mt-3 max-w-md">{destination.desc}</p></div><div className="flex items-center gap-2 mt-8 text-[9px] uppercase tracking-[.25em] text-[#7d6b48] group-hover:text-[#d7bd7a] transition-colors">Enter chamber <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" /></div></div></Link>; })}
-          </div>
-        </section>
+      <div className="ascend-landing__mountain ascend-landing__mountain--left" />
+      <div className="ascend-landing__mountain ascend-landing__mountain--far" />
+      <div className="ascend-landing__mountain ascend-landing__mountain--right" />
 
-        <WorldAtlas />
+      <div className="ascend-landing__ruins" aria-hidden="true">
+        <div className="ascend-landing__tower ascend-landing__tower--one" />
+        <div className="ascend-landing__tower ascend-landing__tower--two" />
+        <div className="ascend-landing__tower ascend-landing__tower--three" />
+        <div className="ascend-landing__tower ascend-landing__tower--four" />
+      </div>
 
-        <section className="border-y border-[#b89a5a]/10 bg-[#0b0a09] py-5 overflow-hidden"><div className="max-w-6xl mx-auto px-5 sm:px-8 flex items-center gap-5"><div className="shrink-0 flex items-center gap-2 text-[9px] uppercase tracking-[.3em] text-[#806c45]"><Activity className="w-3.5 h-3.5" /> Recent Deeds</div><div className="h-4 w-px bg-[#b89a5a]/15" /><div className="overflow-hidden flex-1">{activities.length ? <div className="flex gap-10 w-max ascend-marquee">{[...activities, ...activities].map((activity, index) => <div key={`${activity.id}-${index}`} className="flex items-center gap-3 text-xs whitespace-nowrap"><span className="text-[#d2c5a9]">{activity.username}</span><span className="text-[#5f594f]">recorded</span><span className="text-[#b89a5a]">{activity.title}</span></div>)}</div> : <div className="text-xs text-[#5f594f]">The records are quiet. Your deed could be the first.</div>}</div></div></section>
+      <div className="ascend-landing__water" />
+      <div className="ascend-landing__fog ascend-landing__fog--one" />
+      <div className="ascend-landing__fog ascend-landing__fog--two" />
+      <div className="ascend-landing__fog ascend-landing__fog--three" />
 
-        <section className="max-w-4xl mx-auto px-5 sm:px-8 py-28 text-center"><div className="ascend-divider mb-12" /><div className="ascend-seal w-16 h-16 rounded-full mx-auto mb-8"><span className="relative z-10 text-xl text-[#b89a5a]">✦</span></div><div className="text-[9px] uppercase tracking-[.42em] text-[#806c45]">A fragment from the archive</div><blockquote className="ascend-display text-2xl sm:text-4xl leading-relaxed text-[#cfc3ab] mt-5">“Every record is a mark left upon the unknown. Some marks become legends.”</blockquote><p className="text-[9px] uppercase tracking-[.3em] text-[#5f594f] mt-6">— Archive Fragment 001</p></section>
-      </main>
-      <Footer />
-    </div>
+      <div className="ascend-landing__particles" aria-hidden="true">
+        {particles.map((particle, index) => (
+          <i
+            key={index}
+            className="ascend-landing__particle"
+            style={{
+              '--x': particle.x,
+              '--y': particle.y,
+              '--s': particle.size,
+              '--d': particle.duration,
+              '--delay': particle.delay,
+              '--dx': particle.dx,
+            } as CSSProperties}
+          />
+        ))}
+      </div>
+
+      <div className="ascend-landing__sigil" aria-hidden="true">
+        <span className="ascend-landing__sigil-mark">✦</span>
+      </div>
+
+      <section className="ascend-landing__content">
+        <div className="ascend-landing__eyebrow">THE VEIL HAS OPENED</div>
+        <h1 className="ascend-landing__title">ASCEND</h1>
+        <div className="ascend-landing__subtitle">Beyond the known lies what remembers you</div>
+        <button type="button" className="ascend-landing__enter" onClick={enterRealm} disabled={entering}>
+          Enter the field of unknown
+        </button>
+        <div className="ascend-landing__crest" aria-hidden="true">✦ &nbsp; THE ORDER &nbsp; ✦</div>
+      </section>
+
+      <div className="ascend-landing__flash" aria-hidden="true" />
+      <div className="ascend-landing__transition" aria-hidden="true" />
+    </main>
   );
 }
