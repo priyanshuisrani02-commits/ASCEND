@@ -19,9 +19,23 @@ export const Navbar: React.FC = () => {
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => { if (data?.user?.email) setUserEmail(data.user.email); });
+
+    supabase.auth.getUser().then(async ({ data }) => {
+      const user = data?.user;
+      if (!user) return;
+
+      if (user.email) setUserEmail(user.email);
+
+      try {
+        const notificationData = await getNotifications(user.id);
+        setNotifications(notificationData);
+      } catch {
+        // Notifications are non-critical; don't let them break the navbar.
+        setNotifications([]);
+      }
+    });
+
     getRankings().then(rankings => { if (rankings.length > 0) setCurrentUser(rankings[0]); });
-    getNotifications('current').then(data => setNotifications(data));
   }, []);
 
   const unreadCount = notifications.filter(n => !n.is_read).length;
