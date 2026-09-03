@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { CinematicRealmV2 as CinematicRealm } from '@/components/CinematicRealmV2';
+import { CinematicVideo } from '@/components/CinematicVideo';
 
 export default function HomePage() {
   const router = useRouter();
@@ -16,7 +16,7 @@ export default function HomePage() {
 
   return (
     <main className={`ascend-landing${entering ? ' is-entering' : ''}`} aria-label="ASCEND title screen">
-      <CinematicRealm />
+      <CinematicVideo />
       <div className="ascend-landing__grade" aria-hidden="true" />
       <div className="ascend-landing__vignette" aria-hidden="true" />
 
