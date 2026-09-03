@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { CinematicRealm } from '@/components/CinematicRealm';
+import { CinematicRealmV2 as CinematicRealm } from '@/components/CinematicRealmV2';
 
 export default function HomePage() {
   const router = useRouter();
